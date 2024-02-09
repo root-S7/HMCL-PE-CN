@@ -288,9 +288,11 @@ public class JREUtils {
         switch (renderer){
             case "opengles2":
             case "opengles2_5":
-            case "opengles3_vgpu" :
             case "opengles3":
                 renderLibrary = "libgl4es_114.so";
+                break;
+            case "opengles3_vgpu" :
+                renderLibrary = "libvgpu.so";
                 break;
             case "opengles3_virgl":
             case "vulkan_zink":
@@ -315,9 +317,11 @@ public class JREUtils {
         switch (renderer){
             case "opengles2":
             case "opengles2_5":
-            case "opengles3_vgpu" :
             case "opengles3":
                 renderLibrary = "libgl4es_114.so";
+                break;
+            case "opengles3_vgpu" :
+                renderLibrary = "libvgpu.so";
                 break;
             case "opengles3_virgl":
             case "vulkan_zink":

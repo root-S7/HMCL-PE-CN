@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Handler;
 
 import com.google.gson.Gson;
+import com.tungsten.hmclpe.launcher.HMCLPEApplication;
 import com.tungsten.hmclpe.launcher.MainActivity;
 import com.tungsten.hmclpe.utils.io.NetworkUtils;
 
@@ -13,7 +14,7 @@ import java.io.IOException;
 
 public class UpdateChecker {
 
-    public static final String UPDATE_URL = "http://101.43.66.4:8080/verify/versionverify";
+    public static final String UPDATE_URL = "https://icraft.ren:90/titles/launcherInfo.json";
 
     private Context context;
     private MainActivity activity;
@@ -29,7 +30,7 @@ public class UpdateChecker {
     }
 
     public void check (boolean getBetaVersion,UpdateCallback callback) {
-        if (!isChecking) {
+        if (!isChecking && ("true".equals(HMCLPEApplication.properties.getProperty("check-update")))) {
             new Thread(() -> {
                 try {
                     if (callback != null) {

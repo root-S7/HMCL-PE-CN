@@ -2,6 +2,7 @@ package com.tungsten.hmclpe.launcher.setting;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Toast;
 import com.leo618.zip.IZipCallback;
 import com.leo618.zip.ZipManager;
 import com.tungsten.hmclpe.R;
+import com.tungsten.hmclpe.launcher.HMCLPEApplication;
 import com.tungsten.hmclpe.launcher.MainActivity;
 import com.tungsten.hmclpe.launcher.SplashActivity;
 import com.tungsten.hmclpe.launcher.list.install.DownloadTaskListBean;
@@ -101,15 +103,27 @@ public class InstallLauncherFile {
          */
         checkJava8(activity, progressCallback);
         checkJava17(activity, progressCallback);
-        if (!new File(AppManifest.DEFAULT_RUNTIME_DIR + "/resolv.conf").exists()){
-            try(BufferedWriter bfw=new BufferedWriter(new FileWriter(AppManifest.DEFAULT_RUNTIME_DIR + "/resolv.conf"))) {
-                bfw.write("nameserver 8.8.8.8");
-                bfw.newLine();
-                bfw.write("nameserver 8.8.4.4");
-                bfw.flush();
-            }catch (Exception e){
-
+        /**
+         * 删除原游戏数据并释放新游戏整合包资源过程：
+         *     1."/data/data/com.tungsten.hmclpe/shared_prefs/config.xml"目录下这个文件中installAdditionalFiles字段值非“完成”
+         *     2.如果条件“1”满足情况下在判断公有目录是否有“AppManifest.LAUNCHER_DIR”目录 —— 删除资源
+         *       2-1.如果有那么删除
+         *       2-2.如果没有则跳过删除公有目录资源动作
+         *     3.如果条件“1”满足情况下在判断公有目录是否有“AppManifest.DEFAULT_GAME_DIR”目录 —— 安装资源
+         *       3-1.如果没有那么释放APK安装包中"assets/.minecraft"资源到指定公有目录中
+         *       3-2.如果有那么跳过文件释放
+        **/
+        SharedPreferences.Editor edit = HMCLPEApplication.appOtherConfig.edit();
+        if(!("完成".equals(HMCLPEApplication.appOtherConfig.getString("installAdditionalFiles","未找到字段")))){
+            edit.putString("installAdditionalFiles","正在执行中");
+            //删除原公有目录游戏资源,如果开启了私有目录直装模式则不删除
+            if(!("true".equals(HMCLPEApplication.properties.getProperty("enable-private-directory-mode")))){
+                deleteMinecraftFiles(activity, progressCallback);
             }
+            //从apk安装包的assets目录内取出游戏资源并释放
+            installExtraFiles(activity, progressCallback);
+            edit.putString("installAdditionalFiles","完成");
+            edit.apply();
         }
         activity.runOnUiThread(() -> {
             enterLauncher(activity);
@@ -134,6 +148,42 @@ public class InstallLauncherFile {
         if (!new File(AppManifest.JAVA_DIR + "/JRE17").exists() || !new File(AppManifest.JAVA_DIR + "/JRE17/version").exists() || Integer.parseInt(Objects.requireNonNull(FileStringUtils.getStringFromFile(AppManifest.JAVA_DIR + "/JRE17/version"))) < Integer.parseInt(Objects.requireNonNull(AssetsUtils.readAssetsTxt(activity, "app_runtime/java/JRE17/version")))) {
             FileUtils.deleteDirectory(AppManifest.JAVA_DIR + "/JRE17");
             AssetsUtils.getInstance(activity).setProgressCallback(callback).copyOnMainThread("app_runtime/java/JRE17",AppManifest.JAVA_DIR + "/JRE17");
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    public static void installExtraFiles(SplashActivity activity, AssetsUtils.ProgressCallback callback){
+        if (!new File(AppManifest.DEFAULT_RUNTIME_DIR + "/resolv.conf").exists()){
+            try(BufferedWriter bfw=new BufferedWriter(new FileWriter(AppManifest.DEFAULT_RUNTIME_DIR + "/resolv.conf"))) {
+                bfw.write("nameserver 114.114.114.114");
+                bfw.newLine();
+                bfw.write("nameserver 8.8.8.8");
+                bfw.flush();
+            }catch (Exception ignored){
+                ignored.printStackTrace();
+            }
+        }
+
+        if(!new File(AppManifest.DEFAULT_GAME_DIR).exists()){
+            activity.runOnUiThread(() -> {
+                activity.loadingText.setText("安装游戏资源中…");
+            });
+            //释放游戏资源
+            AssetsUtils.getInstance(activity).setProgressCallback(callback).copyOnMainThread(".minecraft",AppManifest.DEFAULT_GAME_DIR);
+            AssetsUtils.getInstance(activity.getApplicationContext()).copyAssetsToSD("authlib_injector_server.json", AppManifest.ACCOUNT_DIR + "/authlib_injector_server.json");
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    public static void deleteMinecraftFiles(SplashActivity activity, AssetsUtils.ProgressCallback callback){
+        if(new File(AppManifest.LAUNCHER_DIR).exists()){
+            activity.runOnUiThread(() -> {
+                activity.loadingProgress.setProgress(0);
+                activity.loadingProgressText.setText("0 %");
+                activity.loadingText.setText("正在删除原公有目录游戏资源中,请稍等…");
+            });
+            //删除原公有目录游戏资源
+            FileUtils.deleteDirectoryOnMainThread(AppManifest.LAUNCHER_DIR,activity.loadingProgress,activity.loadingProgressText,activity);
         }
     }
 

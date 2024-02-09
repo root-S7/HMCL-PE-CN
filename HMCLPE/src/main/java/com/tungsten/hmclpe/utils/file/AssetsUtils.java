@@ -1,15 +1,9 @@
 package com.tungsten.hmclpe.utils.file;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
+import android.os.*;
 import android.util.Log;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 
 public class AssetsUtils {
 
@@ -67,12 +61,12 @@ public class AssetsUtils {
         currentPosition = 0;
         try {
             totalSize = getTotalSize(context,srcPath);
-            Log.e("assetsFileSize",Long.toString(totalSize));
+            Log.e("assets文件大小",Long.toString(totalSize));
         } catch (IOException e) {
             e.printStackTrace();
         }
         new Thread(() -> {
-            copyAssetsToDst(context, srcPath, sdPath);
+            copyAssetsFilesToPhone(context, srcPath, sdPath);
             if (isSuccess)
                 handler.obtainMessage(SUCCESS).sendToTarget();
             else
@@ -85,11 +79,11 @@ public class AssetsUtils {
         currentPosition = 0;
         try {
             totalSize = getTotalSize(context,srcPath);
-            Log.e("assetsFileSize",Long.toString(totalSize));
+            Log.e("assets文件大小",Long.toString(totalSize));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        copyAssetsToDst(context, srcPath, sdPath);
+        copyAssetsFilesToPhone(context, srcPath, sdPath);
         if (isSuccess) {
             handler.obtainMessage(SUCCESS).sendToTarget();
         }
@@ -113,25 +107,45 @@ public class AssetsUtils {
 
     int currentProgress = 0;
 
-    private void copyAssetsToDst(Context context, String srcPath, String dstPath) {
-        try {
-            String fileNames[] = context.getAssets().list(srcPath);
-            if (fileNames.length > 0) {
-                File file = new File(dstPath);
-                if (!file.exists()) file.mkdirs();
-                for (String fileName : fileNames) {
-                    if (!srcPath.equals("")) { // assets 文件夹下的目录
-                        copyAssetsToDst(context, srcPath + File.separator + fileName, dstPath + File.separator + fileName);
-                    } else { // assets 文件夹
-                        copyAssetsToDst(context, fileName, dstPath + File.separator + fileName);
-                    }
+    private long getTotalSize(Context context,String srcPath) throws IOException {
+        String fileNames[] = context.getAssets().list(srcPath);
+        long size = 0;
+        if (fileNames.length > 0) {
+            for (String fileName : fileNames) {
+                //assets文件夹下的目录
+                if (!srcPath.equals("")) {
+                    size += getTotalSize(context, srcPath + File.separator + fileName);
+                    //assets 文件夹
+                } else {
+                    size += getTotalSize(context, fileName);
                 }
+            }
+        } else {
+            InputStream is = context.getAssets().open(srcPath);
+            size += is.available();
+        }
+        return size;
+    }
+
+    private void copyAssetsFilesToPhone(Context context, String assetsPath, String savePath){
+        try {
+            //获取assets目录下的所有文件及目录名
+            String[] fileNames = context.getAssets().list(assetsPath);
+            //如果是目录
+            if (fileNames.length > 0) {
+                File file = new File(savePath);
+                // 如果文件夹不存在，则递归
+                file.mkdirs();
+                for (String fileName : fileNames) {
+                    copyAssetsFilesToPhone(context, assetsPath + "/" + fileName, savePath + "/" + fileName);
+                }
+                //如果是文件
             } else {
-                File outFile = new File(dstPath);
-                InputStream is = context.getAssets().open(srcPath);
-                FileOutputStream fos = new FileOutputStream(outFile);
+                InputStream is = context.getAssets().open(assetsPath);
+                FileOutputStream fos = new FileOutputStream(new File(savePath));
                 byte[] buffer = new byte[1024];
-                int byteCount;
+                int byteCount = 0;
+                //循环从输入流读取
                 while ((byteCount = is.read(buffer)) != -1) {
                     currentPosition += byteCount;
                     fos.write(buffer, 0, byteCount);
@@ -146,34 +160,14 @@ public class AssetsUtils {
                         }
                     }
                 }
+                //刷新缓冲区
                 fos.flush();
                 is.close();
                 fos.close();
             }
-            isSuccess = true;
         } catch (Exception e) {
             e.printStackTrace();
-            errorStr = e.getMessage();
-            isSuccess = false;
         }
-    }
-
-    private long getTotalSize(Context context,String srcPath) throws IOException {
-        String fileNames[] = context.getAssets().list(srcPath);
-        long size = 0;
-        if (fileNames.length > 0) {
-            for (String fileName : fileNames) {
-                if (!srcPath.equals("")) { // assets 文件夹下的目录
-                    size += getTotalSize(context, srcPath + File.separator + fileName);
-                } else { // assets 文件夹
-                    size += getTotalSize(context, fileName);
-                }
-            }
-        } else {
-            InputStream is = context.getAssets().open(srcPath);
-            size += is.available();
-        }
-        return size;
     }
 
     public interface FileOperateCallback {

@@ -2,18 +2,28 @@ package com.tungsten.hmclpe.launcher;
 
 import android.app.Application;
 import android.content.Context;
-
-import com.tungsten.hmclpe.utils.file.FileUtils;
-
+import android.content.SharedPreferences;
+import com.tungsten.hmclpe.utils.PropertiesFileParse;
+import java.util.Properties;
 import wang.switchy.hin2n.Hin2n;
 
 public class HMCLPEApplication extends Application {
 
     private static Context context;
+    public static Properties properties;
+    public static SharedPreferences appOtherConfig;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        /**
+         * properties文件解析必须放到全局Application
+         * 因为Application的onCreate方法只会在程序启动时有且运行一次，适用于全局共享变量数据
+         * 向上和向下传递值时候如果传递的是频繁访问数据可不在经过意图传递数据值
+         * 解决那些频繁分配内存对象导致程序崩溃问题比如Handler...
+        **/
+        properties = new PropertiesFileParse("config.properties", getApplicationContext()).getProperties();
+        appOtherConfig = getSharedPreferences("config", Context.MODE_PRIVATE);
         context = this.getApplicationContext();
         Hin2n.getInstance().setup(context);
     }

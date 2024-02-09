@@ -976,15 +976,24 @@
                         android:textColor="@color/colorPureBlack"
                         android:id="@+id/boat_renderer_gl4es_114"/>
 
-                    <RadioButton
-                        android:singleLine="true"
-                        android:layout_marginStart="12dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/game_setting_ui_boat_renderer_virgl"
-                        android:textSize="@dimen/text_size_middle"
-                        android:textColor="@color/colorPureBlack"
-                        android:id="@+id/boat_renderer_virgl"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <RadioButton
+                            android:singleLine="true"
+                            android:layout_marginStart="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/game_setting_ui_boat_renderer_virgl"
+                            android:textSize="@dimen/text_size_middle"
+                            android:id="@+id/boat_renderer_virgl"
+                            android:enabled="false"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="\u3000该渲染器已弃用"
+                            android:textColor="@color/colorRed"/>
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -1072,6 +1081,26 @@
                         android:textSize="@dimen/text_size_middle"
                         android:textColor="@color/colorPureBlack"
                         android:id="@+id/pojav_renderer_virgl"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <RadioButton
+                            android:singleLine="true"
+                            android:tag="tint_accent_color"
+                            android:layout_marginStart="12dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="VGPU (OpenGL 2.1+)"
+                            android:textSize="@dimen/text_size_middle"
+                            android:textColor="@color/colorPureBlack"
+                            android:id="@+id/pojav_renderer_vgpu"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="\u3000仅支持1.6 – 1.12.2版本,且部分机型无法使用!!!"
+                            android:textColor="@color/colorRed"/>
+                    </LinearLayout>
 
                 </LinearLayout>
 

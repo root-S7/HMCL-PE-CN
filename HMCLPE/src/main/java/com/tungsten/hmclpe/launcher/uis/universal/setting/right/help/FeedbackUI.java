@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.tungsten.hmclpe.R;
+import com.tungsten.hmclpe.launcher.HMCLPEApplication;
 import com.tungsten.hmclpe.launcher.MainActivity;
 import com.tungsten.hmclpe.launcher.uis.tools.BaseUI;
 import com.tungsten.hmclpe.utils.animation.CustomAnimationUtils;
@@ -64,12 +65,12 @@ public class FeedbackUI extends BaseUI implements View.OnClickListener {
 
     /****************
      *
-     * 发起添加群流程。群号：HMCL-PE(715191324) 的 key 为： 7rX0cr37hu_jNPaGIlqAEf4Ndv1BG-WU
-     * 调用 joinQQGroup(7rX0cr37hu_jNPaGIlqAEf4Ndv1BG-WU) 即可发起手Q客户端申请加群 HMCL-PE(715191324)
+     * 发起添加群流程。群号：Boat澪|HMCLPE手机端交流�(965085729) 的 key 为： ZrtZkHED9ad1edu-TKYvVYz6iGzAa-nS
+     * 调用 joinQQGroup(ZrtZkHED9ad1edu-TKYvVYz6iGzAa-nS) 即可发起手Q客户端申请加群 Boat澪|HMCLPE手机端交流�(965085729)
      *
      * @param key 由官网生成的key
      * @return 返回true表示呼起手Q成功，返回false表示呼起失败
-     ******************/
+    ******************/
     public static boolean joinQQGroup(Context context, String key) {
         Intent intent = new Intent();
         intent.setData(Uri.parse("mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26jump_from%3Dwebapi%26k%3D" + key));
@@ -86,20 +87,20 @@ public class FeedbackUI extends BaseUI implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v == joinDiscord) {
-            Uri uri = Uri.parse("https://discord.gg/zeMNy8Wdgd");
+            Uri uri = Uri.parse(HMCLPEApplication.properties.getProperty("discord"));
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             context.startActivity(intent);
         }
         if (v == joinQQChannel) {
-            Uri uri = Uri.parse("https://qun.qq.com/qqweb/qunpro/share?_wv=3&_wwv=128&appChannel=share&inviteCode=1izjNP&businessType=9&from=246610&biz=ka");
+            Uri uri = Uri.parse(HMCLPEApplication.properties.getProperty("qq-discord"));
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             context.startActivity(intent);
         }
         if (v == joinQQ){
-            joinQQGroup(context, "7rX0cr37hu_jNPaGIlqAEf4Ndv1BG-WU");
+            joinQQGroup(context, HMCLPEApplication.properties.getProperty("qq-group-key"));
         }
         if (v == jumpToGit){
-            Uri uri = Uri.parse("https://github.com/Tungstend/HMCL-PE/issues");
+            Uri uri = Uri.parse("https://github.com/root-S7/HMCL-PE-CN/issues");
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             context.startActivity(intent);
         }

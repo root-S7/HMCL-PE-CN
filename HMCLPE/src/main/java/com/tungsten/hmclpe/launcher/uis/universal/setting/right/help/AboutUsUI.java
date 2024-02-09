@@ -9,6 +9,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.tungsten.hmclpe.R;
+import com.tungsten.hmclpe.launcher.HMCLPEApplication;
 import com.tungsten.hmclpe.launcher.MainActivity;
 import com.tungsten.hmclpe.launcher.dialogs.ContributorListDialog;
 import com.tungsten.hmclpe.launcher.uis.tools.BaseUI;
@@ -203,13 +204,13 @@ public class AboutUsUI extends BaseUI implements View.OnClickListener {
         }
 
         if (view == discord) {
-            uri = Uri.parse("https://discord.gg/zeMNy8Wdgd");
+            uri = Uri.parse(HMCLPEApplication.properties.getProperty("discord"));
         }
         if (view == qqChannel) {
-            uri = Uri.parse("https://qun.qq.com/qqweb/qunpro/share?_wv=3&_wwv=128&appChannel=share&inviteCode=1izjNP&businessType=9&from=246610&biz=ka");
+            uri = Uri.parse(HMCLPEApplication.properties.getProperty("qq-discord"));
         }
         if (view == qq) {
-            FeedbackUI.joinQQGroup(context, "7rX0cr37hu_jNPaGIlqAEf4Ndv1BG-WU");
+            FeedbackUI.joinQQGroup(context, HMCLPEApplication.properties.getProperty("qq-group-key"));
         }
 
         if (view == libHmcl) {
@@ -268,7 +269,7 @@ public class AboutUsUI extends BaseUI implements View.OnClickListener {
             uri = Uri.parse("https://tungstend.github.io/pages/eula.html");
         }
         if (view == openSource) {
-            uri = Uri.parse("https://github.com/huanghongxun/HMCL-PE-CN");
+            uri = Uri.parse("https://github.com/root-S7/HMCL-PE-CN/HMCL-PE-CN");
         }
 
         if (uri != null) {

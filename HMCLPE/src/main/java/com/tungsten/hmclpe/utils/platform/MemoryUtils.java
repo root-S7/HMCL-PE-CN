@@ -21,14 +21,16 @@ public class MemoryUtils {
 
     public static int findBestRAMAllocation(Context context) {
         int totalDeviceMemory = getTotalDeviceMemory(context);
-        if (totalDeviceMemory < 1024) {
-            return 512;
-        } else if (totalDeviceMemory < 2048) {
-            return 1024;
-        } else if (totalDeviceMemory < 4096) {
+        if (totalDeviceMemory <= 3072) {
+            return 1300;
+        } else if (totalDeviceMemory <= 4096) {
+            return 1700;
+        } else if (totalDeviceMemory <= 6144) {
             return 2048;
+        }  else if (totalDeviceMemory <= 8192) {
+            return 3072;
         } else {
-            return 4096;
+            return 3500;
         }
     }
 
