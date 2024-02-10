@@ -22,6 +22,9 @@
 # the command line, set the key security.overridePropertiesFile
 # to false in the master security properties file. It is set to true
 # by default.
+#
+# If this properties file fails to load, the JDK implementation will throw
+# an unspecified error when initializing the java.security.Security class.
 
 # In this file, various security properties are set for use by
 # java.security classes. This is where users can statically register
@@ -547,7 +550,7 @@ sun.security.krb5.maxReferrals=5
 # can be included in the disabledAlgorithms properties.  These properties are
 # to help manage common actions easier across multiple disabledAlgorithm
 # properties.
-# There is one defined security property:  jdk.disabled.NamedCurves
+# There is one defined security property:  jdk.disabled.namedCurves
 # See the property for more specific details.
 #
 #
@@ -624,7 +627,7 @@ sun.security.krb5.maxReferrals=5
 #
 jdk.certpath.disabledAlgorithms=MD2, MD5, SHA1 jdkCA & usage TLSServer, \
     RSA keySize < 1024, DSA keySize < 1024, EC keySize < 224, \
-    SHA1 jdkCA & usage SignedJAR & denyAfter 2019-01-01
+    SHA1 usage SignedJAR & denyAfter 2019-01-01
 
 #
 # Legacy algorithms for certification path (CertPath) processing and
@@ -688,7 +691,7 @@ jdk.security.legacyAlgorithms=SHA1, \
 # See "jdk.certpath.disabledAlgorithms" for syntax descriptions.
 #
 jdk.jar.disabledAlgorithms=MD2, MD5, RSA keySize < 1024, \
-      DSA keySize < 1024, SHA1 jdkCA & denyAfter 2019-01-01
+      DSA keySize < 1024, SHA1 denyAfter 2019-01-01
 
 #
 # Algorithm restrictions for Secure Socket Layer/Transport Layer Security
@@ -874,7 +877,8 @@ jdk.tls.legacyAlgorithms=NULL, anon, RC4, DES, 3DES_EDE_CBC
 # Note: This property is currently used by OpenJDK's JSSE implementation. It
 # is not guaranteed to be examined and used by other implementations.
 #
-jdk.tls.keyLimits=AES/GCM/NoPadding KeyUpdate 2^37
+jdk.tls.keyLimits=AES/GCM/NoPadding KeyUpdate 2^37, \
+                  ChaCha20-Poly1305 KeyUpdate 2^37
 
 #
 # Cryptographic Jurisdiction Policy defaults
@@ -968,11 +972,27 @@ jdk.xml.dsig.secureValidationPolicy=\
     noDuplicateIds,\
     noRetrievalMethodLoops
 
+
 #
-# Serialization system-wide filter
+# Deserialization JVM-wide filter factory
 #
-# A filter, if configured, is used by java.io.ObjectInputStream during
-# deserialization to check the contents of the stream.
+# A filter factory class name is used to configure the JVM-wide filter factory.
+# The class must be public, must have a public zero-argument constructor, implement the
+# java.util.function.BinaryOperator<java.io.ObjectInputFilter> interface, provide its
+# implementation and be accessible via the application class loader.
+# A builtin filter factory is used if no filter factory is defined.
+# See java.io.ObjectInputFilter.Config for more information.
+#
+# If the system property jdk.serialFilterFactory is also specified, it supersedes
+# the security property value defined here.
+#
+#jdk.serialFilterFactory=<classname>
+
+#
+# Deserialization JVM-wide filter
+#
+# A filter, if configured, is used by the filter factory to provide the filter used by
+# java.io.ObjectInputStream during deserialization to check the contents of the stream.
 # A filter is configured as a sequence of patterns, each pattern is either
 # matched against the name of a class in the stream or defines a limit.
 # Patterns are separated by ";" (semicolon).

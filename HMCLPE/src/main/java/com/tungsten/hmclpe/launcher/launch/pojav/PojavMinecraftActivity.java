@@ -21,6 +21,7 @@ import com.tungsten.hmclpe.R;
 import com.tungsten.hmclpe.control.InputBridge;
 import com.tungsten.hmclpe.control.MenuHelper;
 import com.tungsten.hmclpe.control.view.LayoutPanel;
+import com.tungsten.hmclpe.launcher.launch.boat.BoatMinecraftActivity;
 import com.tungsten.hmclpe.launcher.setting.game.GameLaunchSetting;
 
 import net.kdt.pojavlaunch.BaseMainActivity;
@@ -32,6 +33,9 @@ import com.tungsten.hmclpe.utils.LocaleUtils;
 
 import org.lwjgl.glfw.CallbackBridge;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Vector;
 
 public class PojavMinecraftActivity extends BaseMainActivity {
@@ -88,6 +92,17 @@ public class PojavMinecraftActivity extends BaseMainActivity {
                 CallbackBridge.windowHeight = (int) (height * scaleFactor);
                 surface.setDefaultBufferSize(CallbackBridge.windowWidth, CallbackBridge.windowHeight);
                 CallbackBridge.sendUpdateWindowSize(windowWidth, windowHeight);
+
+                File options = new File(gameLaunchSetting.game_directory,"options.txt");
+                if (!options.exists()){
+                    try(FileOutputStream out = new FileOutputStream(options);InputStream in = PojavMinecraftActivity.this.getAssets().open("options.txt")){
+                        byte[] b = new byte[in.available()];
+                        in.read(b);
+                        out.write(b);
+                    }catch (Exception ignored){
+                        ignored.printStackTrace();
+                    }
+                }
 
                 MCOptionUtils.load(gameLaunchSetting.game_directory);
                 MCOptionUtils.set("overrideWidth", String.valueOf(CallbackBridge.windowWidth));

@@ -237,9 +237,6 @@ public class AddAccountDialog extends Dialog implements View.OnClickListener, Ta
                                         }
                                         else {
                                             String u = texture.getUrl();
-                                            if (!u.startsWith("https")){
-                                                u = u.replaceFirst("http","https");
-                                            }
                                             URL url = new URL(u);
                                             HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                                             httpURLConnection.setDoInput(true);
@@ -280,9 +277,6 @@ public class AddAccountDialog extends Dialog implements View.OnClickListener, Ta
                                     }
                                     else {
                                         String u = texture.getUrl();
-                                        if (!u.startsWith("https")){
-                                            u = u.replaceFirst("http","https");
-                                        }
                                         URL url = new URL(u);
                                         HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                                         httpURLConnection.setDoInput(true);
@@ -421,9 +415,6 @@ public class AddAccountDialog extends Dialog implements View.OnClickListener, Ta
                             }
                             else {
                                 String u = texture.getUrl();
-                                if (!u.startsWith("https")){
-                                    u = u.replaceFirst("http","https");
-                                }
                                 URL url = new URL(u);
                                 HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                                 httpURLConnection.setDoInput(true);

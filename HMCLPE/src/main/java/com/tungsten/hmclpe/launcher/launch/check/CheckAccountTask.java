@@ -70,9 +70,6 @@ public class CheckAccountTask extends AsyncTask<Account,Integer,Exception> {
                         }
                         else {
                             String u = texture.getUrl();
-                            if (!u.startsWith("https")){
-                                u = u.replaceFirst("http","https");
-                            }
                             URL url = new URL(u);
                             HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                             httpURLConnection.setDoInput(true);
@@ -136,9 +133,6 @@ public class CheckAccountTask extends AsyncTask<Account,Integer,Exception> {
                                 }
                                 else {
                                     String u = texture.getUrl();
-                                    if (!u.startsWith("https")){
-                                        u = u.replaceFirst("http","https");
-                                    }
                                     URL url = new URL(u);
                                     HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                                     httpURLConnection.setDoInput(true);
@@ -191,9 +185,6 @@ public class CheckAccountTask extends AsyncTask<Account,Integer,Exception> {
                         }
                         else {
                             String u = texture.getUrl();
-                            if (!u.startsWith("https")){
-                                u = u.replaceFirst("http","https");
-                            }
                             URL url = new URL(u);
                             HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                             httpURLConnection.setDoInput(true);

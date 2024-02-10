@@ -2,19 +2,14 @@ package com.tungsten.hmclpe.launcher.list.account;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
+import android.view.*;
+import android.widget.*;
 import com.tungsten.hmclpe.R;
 import com.tungsten.hmclpe.auth.Account;
+import com.tungsten.hmclpe.auth.AuthenticationException;
 import com.tungsten.hmclpe.auth.yggdrasil.GameProfile;
-import com.tungsten.hmclpe.launcher.dialogs.account.AddAuthlibInjectorAccountDialog;
-import com.tungsten.hmclpe.launcher.dialogs.account.SelectProfileDialog;
+import com.tungsten.hmclpe.auth.yggdrasil.YggdrasilSession;
+import com.tungsten.hmclpe.launcher.dialogs.account.*;
 import com.tungsten.hmclpe.skin.utils.Avatar;
 
 import java.util.ArrayList;
@@ -80,20 +75,25 @@ public class ProfileListAdapter extends BaseAdapter {
         viewHolder.name.setText(gameProfile.getName());
         Avatar.setAvatar(Avatar.bitmapToString(skin),viewHolder.face,viewHolder.hat);
         viewHolder.item.setOnClickListener(view1 -> {
-            String skinTexture = Avatar.bitmapToString(skin);
-            Account account = new Account(isNide ? 5 : 4,
-                    dialog.email,
-                    dialog.password,
-                    "mojang",
-                    "0",
-                    gameProfile.getName(),
-                    gameProfile.getId().toString(),
-                    dialog.yggdrasilSession.getAccessToken(),
-                    dialog.yggdrasilSession.getClientToken(),
-                    "",
-                    dialog.url,
-                    skinTexture);
-            onAuthlibInjectorAccountAddListener.onAccountAdd(account);
+            try {
+                YggdrasilSession refresh = dialog.yggdrasilService.refresh(dialog.yggdrasilSession.getAccessToken(), dialog.yggdrasilSession.getClientToken(), gameProfile);
+                String skinTexture = Avatar.bitmapToString(skin);
+                Account account = new Account(isNide ? 5 : 4,
+                        dialog.email,
+                        dialog.password,
+                        "mojang",
+                        "0",
+                        refresh.getSelectedProfile().getName(),
+                        refresh.getSelectedProfile().getId().toString(),
+                        refresh.getAccessToken(),
+                        refresh.getClientToken(),
+                        "",
+                        dialog.url,
+                        skinTexture);
+                onAuthlibInjectorAccountAddListener.onAccountAdd(account);
+            } catch (AuthenticationException e) {
+                throw new RuntimeException(e);
+            }
             dialog.dismiss();
         });
         return view;

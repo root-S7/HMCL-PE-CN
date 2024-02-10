@@ -36,7 +36,7 @@ public class FirstLaunchDialog extends Dialog implements View.OnClickListener {
         handler = new Handler();
         new Thread(() -> {
             String url = HMCLPEApplication.properties.getProperty("announcement-url");
-            String inputLine = null;
+            String inputLine;
             try {
                 URL oracle = new URL(url);
                 URLConnection conn = oracle.openConnection();

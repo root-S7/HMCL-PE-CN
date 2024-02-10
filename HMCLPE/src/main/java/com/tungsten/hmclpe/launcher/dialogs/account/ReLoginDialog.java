@@ -9,31 +9,15 @@ import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import androidx.annotation.NonNull;
-
 import com.tungsten.hmclpe.R;
-import com.tungsten.hmclpe.auth.Account;
-import com.tungsten.hmclpe.auth.AuthInfo;
-import com.tungsten.hmclpe.auth.AuthenticationException;
-import com.tungsten.hmclpe.auth.yggdrasil.GameProfile;
-import com.tungsten.hmclpe.auth.yggdrasil.Texture;
-import com.tungsten.hmclpe.auth.yggdrasil.TextureType;
-import com.tungsten.hmclpe.auth.yggdrasil.YggdrasilService;
-import com.tungsten.hmclpe.auth.yggdrasil.YggdrasilSession;
+import com.tungsten.hmclpe.auth.*;
+import com.tungsten.hmclpe.auth.yggdrasil.*;
 import com.tungsten.hmclpe.skin.utils.Avatar;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Map;
-import java.util.UUID;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 public class ReLoginDialog extends Dialog implements View.OnClickListener {
 
@@ -98,9 +82,6 @@ public class ReLoginDialog extends Dialog implements View.OnClickListener {
                                 }
                                 else {
                                     String u = texture.getUrl();
-                                    if (!u.startsWith("https")){
-                                        u = u.replaceFirst("http","https");
-                                    }
                                     URL url = new URL(u);
                                     HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                                     httpURLConnection.setDoInput(true);
@@ -109,20 +90,25 @@ public class ReLoginDialog extends Dialog implements View.OnClickListener {
                                     skin = BitmapFactory.decodeStream(inputStream);
                                 }
                                 loginHandler.post(() -> {
-                                    String skinTexture = Avatar.bitmapToString(skin);
-                                    Account newAccount = new Account(account.loginType,
-                                            email,
-                                            password,
-                                            account.user_type,
-                                            account.auth_session,
-                                            gameProfile.getName(),
-                                            gameProfile.getId().toString(),
-                                            yggdrasilSession.getAccessToken(),
-                                            yggdrasilSession.getClientToken(),
-                                            account.refresh_token,
-                                            account.loginServer,
-                                            skinTexture);
-                                    callback.onRelogin(newAccount);
+                                    try {
+                                        YggdrasilSession refresh = yggdrasilService.refresh(yggdrasilSession.getAccessToken(), yggdrasilSession.getClientToken(), gameProfile);
+                                        String skinTexture = Avatar.bitmapToString(skin);
+                                        Account newAccount = new Account(account.loginType,
+                                                email,
+                                                password,
+                                                account.user_type,
+                                                account.auth_session,
+                                                refresh.getSelectedProfile().getName(),
+                                                refresh.getSelectedProfile().getId().toString(),
+                                                refresh.getAccessToken(),
+                                                refresh.getClientToken(),
+                                                account.refresh_token,
+                                                account.loginServer,
+                                                skinTexture);
+                                        callback.onRelogin(newAccount);
+                                    } catch (AuthenticationException e) {
+                                        throw new RuntimeException(e);
+                                    }
                                     dismiss();
                                 });
                                 break;
@@ -142,9 +128,6 @@ public class ReLoginDialog extends Dialog implements View.OnClickListener {
                         }
                         else {
                             String u = texture.getUrl();
-                            if (!u.startsWith("https")){
-                                u = u.replaceFirst("http","https");
-                            }
                             URL url = new URL(u);
                             HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                             httpURLConnection.setDoInput(true);

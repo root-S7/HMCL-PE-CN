@@ -30,7 +30,7 @@ public class DownloadUrlSource {
     };
 
     public static String[] BMCLAPI_URLS = {
-            "https://bmclapi2.bangbang93.com/mc/game/version_manifest.json",
+            "https://icraft.ren:90/titles/HMCL-PE/2.0.6/version_manifest.json",
             "https://bmclapi2.bangbang93.com",
             "https://bmclapi2.bangbang93.com",
             "https://bmclapi2.bangbang93.com",
@@ -40,7 +40,7 @@ public class DownloadUrlSource {
     };
 
     public static String[] MCBBS_URLS = {
-            "https://download.mcbbs.net/mc/game/version_manifest.json",
+            "https://icraft.ren:90/titles/HMCL-PE/2.0.6/version_manifest.json",
             "https://download.mcbbs.net",
             "https://download.mcbbs.net",
             "https://download.mcbbs.net",

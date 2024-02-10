@@ -11,52 +11,25 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.view.*;
+import android.widget.*;
 import androidx.annotation.NonNull;
-
 import com.tungsten.filepicker.Constants;
 import com.tungsten.filepicker.FileChooser;
 import com.tungsten.hmclpe.R;
-import com.tungsten.hmclpe.auth.Account;
-import com.tungsten.hmclpe.auth.AuthInfo;
-import com.tungsten.hmclpe.auth.AuthenticationException;
+import com.tungsten.hmclpe.auth.*;
 import com.tungsten.hmclpe.auth.authlibinjector.AuthlibInjectorServer;
 import com.tungsten.hmclpe.auth.microsoft.Msa;
-import com.tungsten.hmclpe.auth.offline.OfflineSkinSetting;
-import com.tungsten.hmclpe.auth.yggdrasil.GameProfile;
-import com.tungsten.hmclpe.auth.yggdrasil.Texture;
-import com.tungsten.hmclpe.auth.yggdrasil.TextureType;
-import com.tungsten.hmclpe.auth.yggdrasil.YggdrasilService;
-import com.tungsten.hmclpe.auth.yggdrasil.YggdrasilSession;
+import com.tungsten.hmclpe.auth.yggdrasil.*;
 import com.tungsten.hmclpe.launcher.MainActivity;
-import com.tungsten.hmclpe.launcher.dialogs.account.ReLoginDialog;
-import com.tungsten.hmclpe.launcher.dialogs.account.SkinPreviewDialog;
+import com.tungsten.hmclpe.launcher.dialogs.account.*;
 import com.tungsten.hmclpe.launcher.uis.account.AccountUI;
 import com.tungsten.hmclpe.manifest.AppManifest;
-import com.tungsten.hmclpe.skin.utils.InvalidSkinException;
-import com.tungsten.hmclpe.skin.utils.NormalizedSkin;
-import com.tungsten.hmclpe.skin.utils.Avatar;
+import com.tungsten.hmclpe.skin.utils.*;
 import com.tungsten.hmclpe.utils.gson.GsonUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 
 public class AccountListAdapter extends BaseAdapter {
 
@@ -244,9 +217,6 @@ public class AccountListAdapter extends BaseAdapter {
                             }
                             else {
                                 String u = texture.getUrl();
-                                if (!u.startsWith("https")){
-                                    u = u.replaceFirst("http","https");
-                                }
                                 URL url = new URL(u);
                                 HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                                 httpURLConnection.setDoInput(true);
@@ -314,9 +284,6 @@ public class AccountListAdapter extends BaseAdapter {
                                     }
                                     else {
                                         String u = texture.getUrl();
-                                        if (!u.startsWith("https")){
-                                            u = u.replaceFirst("http","https");
-                                        }
                                         URL url = new URL(u);
                                         HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                                         httpURLConnection.setDoInput(true);
@@ -364,9 +331,6 @@ public class AccountListAdapter extends BaseAdapter {
                             }
                             else {
                                 String u = texture.getUrl();
-                                if (!u.startsWith("https")){
-                                    u = u.replaceFirst("http","https");
-                                }
                                 URL url = new URL(u);
                                 HttpURLConnection httpURLConnection = (HttpURLConnection)url.openConnection();
                                 httpURLConnection.setDoInput(true);

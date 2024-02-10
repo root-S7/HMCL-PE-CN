@@ -30,6 +30,9 @@ import java.util.concurrent.TimeUnit;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Collections.unmodifiableList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class YggdrasilService {
 
     private static final ThreadPoolExecutor POOL = threadPool("YggdrasilProfileProperties", true, 2, 10, TimeUnit.SECONDS);
@@ -48,10 +51,7 @@ public class YggdrasilService {
         Objects.requireNonNull(clientToken);
 
         Map<String, Object> request = new HashMap<>();
-        request.put("agent", mapOf(
-                pair("name", "Minecraft"),
-                pair("version", 1)
-        ));
+        request.put("agent", mapOf(pair("name", "Minecraft"), pair("version", 1)));
         request.put("username", username);
         request.put("password", password);
         request.put("clientToken", clientToken);
@@ -67,28 +67,47 @@ public class YggdrasilService {
         return request;
     }
 
+    public YggdrasilSession refresh(String accessToken, String clientToken) throws AuthenticationException {
+        Objects.requireNonNull(accessToken);
+        Objects.requireNonNull(clientToken);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("accessToken",accessToken);
+            jsonObject.put("clientToken",clientToken);
+            jsonObject.put("requestUser",true);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+        YggdrasilSession response = handleAuthenticationResponse(NetworkUtils.doPost(provider.getRefreshmentURL().toString(),jsonObject,"application/json;charset=utf-8"), clientToken);
+        if (response.getSelectedProfile() == null) {
+            throw new ServerResponseMalformedException("Failed to select character");
+        }
+        return response;
+    }
+
     public YggdrasilSession refresh(String accessToken, String clientToken, GameProfile characterToSelect) throws AuthenticationException {
         Objects.requireNonNull(accessToken);
         Objects.requireNonNull(clientToken);
-
-        Map<String, Object> request = createRequestWithCredentials(accessToken, clientToken);
-        request.put("requestUser", true);
-
-        if (characterToSelect != null) {
-            request.put("selectedProfile", mapOf(
-                    pair("id", characterToSelect.getId()),
-                    pair("name", characterToSelect.getName())));
+        JSONObject jsonSelectedProfile = new JSONObject();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("accessToken",accessToken);
+            jsonObject.put("clientToken",clientToken);
+            jsonObject.put("requestUser",true);
+            if(characterToSelect != null){
+                jsonSelectedProfile.put("id",UUIDTypeAdapter.fromUUID(characterToSelect.getId()));
+                jsonSelectedProfile.put("name",characterToSelect.getName());
+                jsonObject.put("selectedProfile",jsonSelectedProfile);
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
         }
-
-        YggdrasilSession response = handleAuthenticationResponse(request(provider.getRefreshmentURL(), request), clientToken);
-
+        YggdrasilSession response = handleAuthenticationResponse(NetworkUtils.doPost(provider.getRefreshmentURL().toString(),jsonObject,"application/json;charset=utf-8"), clientToken);
         if (characterToSelect != null) {
-            if (response.getSelectedProfile() == null ||
-                    !response.getSelectedProfile().getId().equals(characterToSelect.getId())) {
+            if (response.getSelectedProfile() == null || !response.getSelectedProfile().getId().equals(characterToSelect.getId())) {
                 throw new ServerResponseMalformedException("Failed to select character");
             }
         }
-
         return response;
     }
 
@@ -103,9 +122,7 @@ public class YggdrasilService {
             requireEmpty(request(provider.getValidationURL(), createRequestWithCredentials(accessToken, clientToken)));
             return true;
         } catch (RemoteAuthenticationException e) {
-            if ("ForbiddenOperationException".equals(e.getRemoteName())) {
-                return false;
-            }
+            if ("ForbiddenOperationException".equals(e.getRemoteName())) return false;
             throw e;
         }
     }
@@ -166,9 +183,7 @@ public class YggdrasilService {
             }
             TextureResponse texturePayload = fromJson(new String(decodedBinary, UTF_8), TextureResponse.class);
             return Optional.ofNullable(texturePayload.textures);
-        } else {
-            return Optional.empty();
-        }
+        } else return Optional.empty();
     }
 
     private static YggdrasilSession handleAuthenticationResponse(String responseText, String clientToken) throws AuthenticationException {
@@ -178,33 +193,24 @@ public class YggdrasilService {
         //if (!clientToken.equals(response.clientToken))
             //throw new AuthenticationException("Client token changed from " + clientToken + " to " + response.clientToken);
 
-        return new YggdrasilSession(
-                response.clientToken,
-                response.accessToken,
-                response.selectedProfile,
-                response.availableProfiles == null ? null : unmodifiableList(response.availableProfiles),
-                response.user == null ? null : response.user.getProperties());
+        return new YggdrasilSession(response.clientToken, response.accessToken, response.selectedProfile, response.availableProfiles == null ? null : unmodifiableList(response.availableProfiles), response.user == null ? null : response.user.getProperties());
     }
 
     private static void requireEmpty(String response) throws AuthenticationException {
-        if (StringUtils.isBlank(response))
-            return;
+        if (StringUtils.isBlank(response)) return;
 
         handleErrorMessage(fromJson(response, ErrorResponse.class));
     }
 
     private static void handleErrorMessage(ErrorResponse response) throws AuthenticationException {
-        if (!StringUtils.isBlank(response.error)) {
-            throw new RemoteAuthenticationException(response.error, response.errorMessage, response.cause);
-        }
+        if (!StringUtils.isBlank(response.error)) throw new RemoteAuthenticationException(response.error, response.errorMessage, response.cause);
     }
 
     private static String request(URL url, Object payload) throws AuthenticationException {
         try {
-            if (payload == null)
-                return NetworkUtils.doGet(url);
-            else
-                return NetworkUtils.doPost(url, payload instanceof String ? (String) payload : GSON.toJson(payload), "application/json");
+            if (payload == null) return NetworkUtils.doGet(url);
+
+            else return NetworkUtils.doPost(url, payload instanceof String ? (String) payload : GSON.toJson(payload), "application/json");
         } catch (IOException e) {
             throw new ServerDisconnectException(e);
         }
@@ -236,10 +242,7 @@ public class YggdrasilService {
         public String cause;
     }
 
-    private static final Gson GSON = new GsonBuilder()
-            .registerTypeAdapter(UUID.class, UUIDTypeAdapter.INSTANCE)
-            .registerTypeAdapterFactory(ValidationTypeAdapterFactory.INSTANCE)
-            .create();
+    private static final Gson GSON = new GsonBuilder().registerTypeAdapter(UUID.class, UUIDTypeAdapter.INSTANCE).registerTypeAdapterFactory(ValidationTypeAdapterFactory.INSTANCE).create();
 
     public static final String PROFILE_URL = "https://www.minecraft.net/profile";
     public static final String MIGRATION_FAQ_URL = "https://help.minecraft.net/hc/en-us/articles/360050865492-JAVA-Account-Migration-FAQ";

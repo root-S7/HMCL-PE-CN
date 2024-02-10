@@ -93,16 +93,17 @@ public class BoatMinecraftActivity extends BoatActivity {
                 surface.setDefaultBufferSize((int) (width * scaleFactor), (int) (height * scaleFactor));
                 BoatInput.pushEventWindow(width,height);
 
-                File options=new File(gameLaunchSetting.game_directory,"options.txt");
+                File options = new File(gameLaunchSetting.game_directory,"options.txt");
                 if (!options.exists()){
-                    try(FileOutputStream out=new FileOutputStream(options);InputStream in = BoatMinecraftActivity.this.getAssets().open("options.txt")){
-                        byte[] b=new byte[in.available()];
+                    try(FileOutputStream out = new FileOutputStream(options);InputStream in = BoatMinecraftActivity.this.getAssets().open("options.txt")){
+                        byte[] b = new byte[in.available()];
                         in.read(b);
                         out.write(b);
                     }catch (Exception ignored){
-
+                        ignored.printStackTrace();
                     }
                 }
+
                 MCOptionUtils.load(gameLaunchSetting.game_directory);
                 MCOptionUtils.set("overrideWidth", String.valueOf((int) (width * scaleFactor)));
                 MCOptionUtils.set("overrideHeight", String.valueOf((int) (height * scaleFactor)));

@@ -15,6 +15,14 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 
 import com.tungsten.hmclpe.utils.Pair;
 
+import org.json.JSONObject;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 /**
  *
  * @author huangyuhui
@@ -198,6 +206,36 @@ public final class NetworkUtils {
             os.write(bytes);
         }
         return readData(con);
+    }
+
+    private static String bodyInfo;
+    public static String doPost(String postURL, JSONObject jsonObject, String contentType){
+        //由于安卓4.0以后不允许主线程操作网络所以必须在子线程操作
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                OkHttpClient okHttpClient = new OkHttpClient();
+                MediaType parse = MediaType.parse(contentType);
+                RequestBody requestBody = RequestBody.create(parse, String.valueOf(jsonObject));
+                Request request = new Request.Builder().url(postURL).post(requestBody).build();
+                try {
+                    Response execute = okHttpClient.newCall(request).execute();
+                    //Log.d("请求码事件", String.valueOf(execute.code()));
+                    bodyInfo = execute.body().string();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+        thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        //Log.d("事件 —— 请求后信息", bodyInfo);
+        return bodyInfo;
     }
 
     public static String readData(HttpURLConnection con) throws IOException {
