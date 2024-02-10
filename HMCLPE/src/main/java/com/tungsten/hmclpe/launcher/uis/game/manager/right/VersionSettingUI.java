@@ -1,38 +1,21 @@
 package com.tungsten.hmclpe.launcher.uis.game.manager.right;
 
 import static android.app.Activity.RESULT_OK;
-
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.net.Uri;
 import android.os.Environment;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.text.*;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RadioButton;
-import android.widget.SeekBar;
-import android.widget.TextView;
-
+import android.view.*;
+import android.widget.*;
 import androidx.appcompat.widget.SwitchCompat;
-
 import com.tungsten.filepicker.Constants;
 import com.tungsten.filepicker.FileChooser;
 import com.tungsten.filepicker.FolderChooser;
 import com.tungsten.hmclpe.R;
 import com.tungsten.hmclpe.control.ControlPatternActivity;
 import com.tungsten.hmclpe.launcher.MainActivity;
-import com.tungsten.hmclpe.launcher.VerifyInterface;
 import com.tungsten.hmclpe.launcher.dialogs.control.ControllerManagerDialog;
 import com.tungsten.hmclpe.launcher.list.local.game.GameListBean;
 import com.tungsten.hmclpe.manifest.AppManifest;
@@ -45,7 +28,6 @@ import com.tungsten.hmclpe.utils.file.FileUtils;
 import com.tungsten.hmclpe.utils.file.UriUtils;
 import com.tungsten.hmclpe.utils.gson.GsonUtils;
 import com.tungsten.hmclpe.utils.platform.MemoryUtils;
-
 import java.io.File;
 import java.util.ArrayList;
 
