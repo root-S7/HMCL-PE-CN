@@ -492,11 +492,13 @@ public class VersionSettingUI extends BaseUI implements View.OnClickListener, Co
             checkIsolateSetting.setChecked(true);
             enableSettingLayout();
             privateGameSetting = GsonUtils.getPrivateGameSettingFromFile(settingPath);
+            boatRendererVirGL.setEnabled(false);
         }
         else {
             checkIsolateSetting.setChecked(false);
             disableSettingLayout();
             privateGameSetting = null;
+            boatRendererVirGL.setEnabled(false);
         }
         onRefresh();
     }
@@ -852,6 +854,7 @@ public class VersionSettingUI extends BaseUI implements View.OnClickListener, Co
                 privateGameSetting = null;
             }
             onRefresh();
+            boatRendererVirGL.setEnabled(false);
         }
         else {
             if (compoundButton == checkAutoRam && privateGameSetting != null){

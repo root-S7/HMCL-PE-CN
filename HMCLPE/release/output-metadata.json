@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 12,
-      "versionName": "2.0.6",
-      "outputFile": "HMCL-PE_v2.0.6.apk"
+      "versionCode": 13,
+      "versionName": "2.0.8",
+      "outputFile": "HMCL-PE_v2.0.8.apk"
     }
   ],
   "elementType": "File"

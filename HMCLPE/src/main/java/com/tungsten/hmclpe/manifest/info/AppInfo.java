@@ -3,7 +3,7 @@ package com.tungsten.hmclpe.manifest.info;
 public class AppInfo {
 
     public final static String APP_NAME = "Hello Minecraft! Launcher Pocket Edition";
-    public final static String APP_VERSION_NAME = "v2.0.6";
+    public final static String APP_VERSION_NAME = "v2.0.8";
     public final static int CONTROL_VERSION_CODE = 1;
     public final static int JAVA_17_VERSION_CODE = 2;
     public final static String JAVA_17_DOWNLOAD_URL = "https://wwi.lanzoup.com/ikfZJ0c2yfkj";

@@ -1,99 +1,32 @@
-<div align="center">
-    <img width="175" src="/HMCLPE/src/main/res/drawable/ic_craft_table.png"></img>
-</div>
+<h1 align="center">HMCL-PE非官方版</h1>
 
-<h1 align="center">HMCL-PE</h1>
+<h2>注：该项目即将停止更新，有能力的可自行克隆项目修复BUG</h2>
+<h2>注：该项目即将停止更新，有能力的可自行克隆项目修复BUG</h2>
+<h2>注：该项目即将停止更新，有能力的可自行克隆项目修复BUG</h2>
+<details>
+<summary>相较于官方版修复的BUG & 新增功能</summary>
 
-<div align="center">
+- 适合服务器客户端使用，内置了直装模块 [assets/.minecraft]
+- 去除res资源目录混淆以便用户修改
+- 支持删除原整合包数据后在释放文件
+- 支持释放到公有目录或私有目录
+- 支持使用文本编写外置皮肤站地址 [assets/authlib_injector_server.json]
+- 可启动1.19.3+ [Boat、PojavLauncher后端均可]
+- 修复1.13.X-1.15.X版本中游戏内材质大面积透视BUG [仅PojavLauncher后端修复]
+- 支持自定义布局文件 [assets/control/Default]
+- 提供源码让用户自行改动项目，有文本说明提示部分类文件作用
+- 支持在配置文件中自定义某些设置 [assets/config.properties]
+- 修复使用“皮肤站”方式登录时，如果皮肤站链接非https协议部分用户无法登录问题
+- 修复使用“皮肤站”方式登录时，使用Java8启动游戏崩溃BUG
+- 修复使用“皮肤站”方式登录时，如果账户内有多个角色时选择任意一个进入服务器提示“无效的会话...”
+- 修复使用“皮肤站”方式登录时，有时候角色没有皮肤BUG
+</details>
 
-![MainScreen](/.github/images/main.jpg)
+<details>
+<summary>目前还存在的问题</summary>
 
-![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
-[![Discord](https://img.shields.io/badge/Discord-4903FC?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/c79XjKHy4S)
-![Gradle](https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white)
-![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
-[![QQ](https://img.shields.io/badge/QQ-4903FC?style=for-the-badge&logoColor=white)](https://jq.qq.com/?_wv=1027&k=PomNnDJW)
-![Downloads](https://img.shields.io/github/downloads/Tungstend/HMCL-PE/total?color=green&style=for-the-badge)
-
-[![Sponsor](https://img.shields.io/badge/sponsor-30363D?style=for-the-badge&logo=GitHub-Sponsors&logoColor=#EA4AAA)](https://afdian.net/@tungs)
-
-</div>
-
-- [Hello Minecraft! Launcher:Pocket Edition](https://tungstend.github.io/): 
-The software attempts to restore HMCL on Android devices, allowing players to manage Games, Mods, Controls and More.
-
-- **Run Minecraft Java Edition directly on your Android device**, with mod support and all versions of the Game.
-
-- **HMCL-PE has stopped maintenance. If you want to run Minecraft: Java Edition on Android devices and get a better experience, please download [Fold Craft Launcher](https://fcl-team.github.io/) or [PojavLauncher](https://github.com/PojavLauncherTeam/PojavLauncher). Note: If you have any problems when using other launchers, HMCL-dev is not responsible. Please ask the developer of the launcher you are using for help.**
-
-<h1 align="center">Features</h1>
-
-- [x] Run Minecraft on all versions
-- [x] Run Forge, OptiFine, Fabric and others
-- [x] Java 8 and Java 17
-- [x] Mouse Virtual
-- [x] Download Mods, ModPacks, Textures and Worlds.
-- [x] Using Shaders (with VirGL)
-- [x] Create custom controllers
-- [x] Customizable launcher themes and colors
-- [x] And much more!
-
-<h1 align="center">Screenshots</h1>
-
-![GameScreen1](/.github/images/mod.jpg)
-![GameScreen2](/.github/images/game.jpg)
-
-<h1 align="center">Compilation</h1>
-
-You can compile the software **using Android Studio**, with the **Android SDK & NDK** packages.
-Clone the remote repository using the following URL:
-```
-https://github.com/Tungstend/HMCL-PE
-```
-Run the ```link.bat``` file to do a build configuration.
-Apply for QQ API and change API key in MainActivity.java.
-After that, Compile using Gradle by Android Studio.
-
-<h1 align="center">License</h1>
-
-The software is distributed under [GPL v3](https://www.gnu.org/licenses/gpl-3.0.html)
-```
-HMCL-PE is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-HMCL-PE is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with HMCL-PE.  If not, see <https://www.gnu.org/licenses/>.
-```
-
-<h1 align="center">Third Party Components</h1>
-
-- [HMCL](https://github.com/huanghongxun/HMCL)
-
-- [Boat and related projects](https://github.com/AOF-Dev/Boat)
-
-- [PojavLauncher and related projects](https://github.com/PojavLauncherTeam/PojavLauncher)
-
-- [Hin2n](https://github.com/switch-iot/hin2n)
-
-- [authlib-injector](https://github.com/yushijinhun/authlib-injector)
-
-- [nide8auth](https://login.mc-user.com:233/account/login)
-
-- [forge-install-bootstrapper](https://github.com/bangbang93/forge-install-bootstrapper)
-
-- [TouchInjector](https://github.com/Tungstend/TouchInjector)
-
-<h1 align="center">Sponsor</h1>
-
-<div align="center">
-
-[![Sponsor](https://img.shields.io/badge/sponsor-30363D?style=for-the-badge&logo=GitHub-Sponsors&logoColor=#EA4AAA)](https://afdian.net/@tungs)
-
-</div>
+- 需要更新PojavLauncher后端才能使用Angle渲染器
+- 需要修复按键的"视角跟随"功能引发的乱飞BUG
+- 需要增加Java11、Java21运行环境
+- 目前无法启动1.20Forge端，原因：似乎是modlauncher加载存在BUG？
+</details>
