@@ -1,5 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="filebrowser_provider" tools:ignore="MissingTranslation" translatable="false">com.tungsten.filepicker.provider</string>
+    <string name="filebrowser_provider" tools:ignore="MissingTranslation" translatable="false">ren.icraft.filepicker.provider</string>
     <string name="cut">Cut</string>
     <string name="refresh">Refresh</string>
     <string name="paste">Paste</string>

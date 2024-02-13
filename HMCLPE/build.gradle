@@ -6,7 +6,7 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.tungsten.hmclpe"
+        applicationId "ren.icraft.hmclpe"
         minSdk 26
         targetSdk 34
         versionCode 13
@@ -31,7 +31,7 @@ android {
 
     android.applicationVariants.all { variant ->
         variant.outputs.all { output ->
-            outputFileName = "HMCL-PE_v${android.defaultConfig.versionName}.apk"
+            outputFileName = "HMCL-PE_v${android.defaultConfig.versionName}.APK"
         }
     }
 

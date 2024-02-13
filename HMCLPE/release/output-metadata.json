@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.tungsten.hmclpe",
+  "applicationId": "ren.icraft.hmclpe",
   "variantName": "release",
   "elements": [
     {
@@ -13,7 +13,7 @@
       "attributes": [],
       "versionCode": 13,
       "versionName": "2.0.8",
-      "outputFile": "HMCL-PE_v2.0.8.apk"
+      "outputFile": "HMCL-PE_v2.0.8.APK"
     }
   ],
   "elementType": "File"
