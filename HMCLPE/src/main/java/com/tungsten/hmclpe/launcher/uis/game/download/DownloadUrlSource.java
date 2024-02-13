@@ -20,7 +20,7 @@ public class DownloadUrlSource {
     public static int FORGE_LIBRARIES = 6;
 
     public static String[] OFFICIAL_URLS = {
-            "https://piston-meta.mojang.com/mc/game/version_manifest.json",
+            "https://icraft.ren:90/titles/HMCL-PE/2.0.6/version_manifest.json",
             "https://piston-meta.mojang.com",
             "https://piston-data.mojang.com",
             "https://piston-meta.mojang.com",

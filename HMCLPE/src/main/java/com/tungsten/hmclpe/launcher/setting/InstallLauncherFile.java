@@ -122,9 +122,9 @@ public class InstallLauncherFile {
             }
             //从apk安装包的assets目录内取出游戏资源并释放
             installExtraFiles(activity, progressCallback);
-            edit.putString("installAdditionalFiles","完成");
-            edit.apply();
         }
+        edit.putString("installAdditionalFiles","完成");
+        edit.apply();
         activity.runOnUiThread(() -> {
             enterLauncher(activity);
         });
@@ -155,23 +155,21 @@ public class InstallLauncherFile {
     public static void installExtraFiles(SplashActivity activity, AssetsUtils.ProgressCallback callback){
         if (!new File(AppManifest.DEFAULT_RUNTIME_DIR + "/resolv.conf").exists()){
             try(BufferedWriter bfw=new BufferedWriter(new FileWriter(AppManifest.DEFAULT_RUNTIME_DIR + "/resolv.conf"))) {
-                bfw.write("nameserver 114.114.114.114");
+                bfw.write("nameserver 223.5.5.5");
                 bfw.newLine();
-                bfw.write("nameserver 8.8.8.8");
+                bfw.write("nameserver 114.114.114.114");
                 bfw.flush();
             }catch (Exception ignored){
                 ignored.printStackTrace();
             }
         }
 
-        if(!new File(AppManifest.DEFAULT_GAME_DIR).exists()){
-            activity.runOnUiThread(() -> {
-                activity.loadingText.setText("安装游戏资源中…");
-            });
-            //释放游戏资源
-            AssetsUtils.getInstance(activity).setProgressCallback(callback).copyOnMainThread(".minecraft",AppManifest.DEFAULT_GAME_DIR);
-            AssetsUtils.getInstance(activity.getApplicationContext()).copyAssetsToSD("authlib_injector_server.json", AppManifest.ACCOUNT_DIR + "/authlib_injector_server.json");
-        }
+        activity.runOnUiThread(() -> {
+            activity.loadingText.setText("安装游戏资源中…");
+        });
+        //释放游戏资源
+        AssetsUtils.getInstance(activity).setProgressCallback(callback).copyOnMainThread(".minecraft",AppManifest.DEFAULT_GAME_DIR);
+        AssetsUtils.getInstance(activity.getApplicationContext()).copyAssetsToSD("authlib_injector_server.json", AppManifest.ACCOUNT_DIR + "/authlib_injector_server.json");
     }
 
     @SuppressLint("SetTextI18n")
