@@ -49,7 +49,10 @@ public class AppManifest {
         STYLE_DIR = INNER_FILE_DIR + "/style";
         DEBUG_DIR = context.getExternalFilesDir("debug").getAbsolutePath();
         INNER_GAME_DIR = context.getExternalFilesDir(".minecraft").getAbsolutePath();
-        if("true".equals(HMCLPEApplication.properties.getProperty("enable-private-directory-mode"))) DEFAULT_GAME_DIR = INNER_GAME_DIR;
+        if("true".equals(HMCLPEApplication.properties.getProperty("enable-private-directory-mode"))){
+            LAUNCHER_DIR = context.getExternalFilesDir(null).getAbsolutePath();
+            DEFAULT_GAME_DIR = LAUNCHER_DIR + "/.minecraft";
+        }
 
         DEFAULT_CACHE_DIR = context.getCacheDir().getAbsolutePath();
         INSTALL_DIR = DEFAULT_CACHE_DIR + "/install";
