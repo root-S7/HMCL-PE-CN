@@ -27,10 +27,12 @@ public class MemoryUtils {
             return 1700;
         } else if (totalDeviceMemory <= 6144) {
             return 2048;
-        }  else if (totalDeviceMemory <= 8192) {
-            return 3072;
+        } else if (totalDeviceMemory <= 8192) {
+            return 2560;
+        } else if (totalDeviceMemory <= 12288) {
+            return 3712;
         } else {
-            return 3500;
+            return 4096;
         }
     }
 

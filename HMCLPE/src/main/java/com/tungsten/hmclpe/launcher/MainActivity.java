@@ -4,19 +4,26 @@ import static com.tungsten.hmclpe.manifest.info.AppInfo.IS_PUBLIC_VERSION;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -92,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         init();
 
-        showEula();
+        ignoreBatteryOptimization();
     }
 
     public void init(){
@@ -118,6 +125,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             loadingHandler.sendEmptyMessage(0);
         }).start();
+    }
+
+    @SuppressLint("BatteryLife")
+    private void ignoreBatteryOptimization() {
+        if(!isIgnoringBatteryOptimizations()) {
+            Intent i = new Intent();
+            i.setAction(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            i.setData(Uri.parse("package:" + getPackageName()));
+            startActivityForResult(i,1000);
+        }else showEula();
+    }
+
+    private boolean isIgnoringBatteryOptimizations() {
+        boolean isIgnoring = false;
+        PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        if (powerManager != null) {
+            isIgnoring = powerManager.isIgnoringBatteryOptimizations(getPackageName());
+        }
+        return isIgnoring;
     }
 
     @SuppressLint("HandlerLeak")
@@ -296,14 +322,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (isLoaded){
+        if(isLoaded){
             uiManager.onActivityResult(requestCode,resultCode,data);
         }
-        if (SkinPreviewDialog.getInstance() != null) {
+        if(SkinPreviewDialog.getInstance() != null) {
             SkinPreviewDialog.getInstance().onActivityResult(requestCode,resultCode,data);
         }
         if(requestCode == Constants.REQUEST_LOGIN && resultCode == Constants.ACTIVITY_OK) {
             Tencent.handleResultData(data, iUiListener);
+        }
+        if(requestCode == 1000) {
+            if(!isIgnoringBatteryOptimizations()){
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.setCancelable(false).setMessage("请授予启动器后台运行权限，否则可能无法正常运行").setPositiveButton("授予权限", (dialog1, which) -> ignoreBatteryOptimization()).setNegativeButton("关闭应用", (dialog2, which) -> System.exit(0));
+                final AlertDialog dialog = alert.create();
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.show();
+            }else showEula();
         }
     }
 
