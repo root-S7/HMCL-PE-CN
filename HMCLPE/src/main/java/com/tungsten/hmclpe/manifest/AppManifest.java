@@ -7,7 +7,7 @@ import com.tungsten.hmclpe.utils.file.FileUtils;
 
 public class AppManifest {
 
-    public static String LAUNCHER_DIR = Environment.getExternalStorageDirectory() + "/" + HMCLPEApplication.properties.getProperty("put-directory");
+    public static String LAUNCHER_DIR = Environment.getExternalStorageDirectory() + "/" + HMCLPEApplication.properties.getProperty("put-directory","HMCLPE-Server");
     public static String DEFAULT_GAME_DIR = LAUNCHER_DIR + "/.minecraft";
 
     public static String INNER_DIR;
@@ -49,7 +49,7 @@ public class AppManifest {
         STYLE_DIR = INNER_FILE_DIR + "/style";
         DEBUG_DIR = context.getExternalFilesDir("debug").getAbsolutePath();
         INNER_GAME_DIR = context.getExternalFilesDir(".minecraft").getAbsolutePath();
-        if("true".equals(HMCLPEApplication.properties.getProperty("enable-private-directory-mode"))){
+        if("true".equals(HMCLPEApplication.properties.getProperty("enable-private-directory-mode","false"))){
             LAUNCHER_DIR = context.getExternalFilesDir(null).getAbsolutePath();
             DEFAULT_GAME_DIR = LAUNCHER_DIR + "/.minecraft";
         }

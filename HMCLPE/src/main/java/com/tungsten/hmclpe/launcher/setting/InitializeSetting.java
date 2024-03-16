@@ -5,7 +5,9 @@ import android.content.Context;
 
 import com.tungsten.hmclpe.R;
 import com.tungsten.hmclpe.auth.authlibinjector.AuthlibInjectorServer;
+import com.tungsten.hmclpe.launcher.HMCLPEApplication;
 import com.tungsten.hmclpe.launcher.MainActivity;
+import com.tungsten.hmclpe.launcher.game.Library;
 import com.tungsten.hmclpe.launcher.list.info.contents.ContentListBean;
 import com.tungsten.hmclpe.manifest.AppManifest;
 import com.tungsten.hmclpe.launcher.setting.game.child.BoatLauncherSetting;
@@ -82,7 +84,7 @@ public class InitializeSetting {
             launcherSetting = GsonUtils.getLauncherSettingFromFile(AppManifest.SETTING_DIR + "/launcher_setting.json");
         }
         else {
-            launcherSetting = new LauncherSetting(AppManifest.DEFAULT_GAME_DIR,new SourceSetting(false,2,2),0,64,false,true,false,true,false,"DEFAULT",new BackgroundSetting(0,"",""),AppManifest.DEFAULT_CACHE_DIR);
+            launcherSetting = new LauncherSetting(AppManifest.DEFAULT_GAME_DIR,new SourceSetting(false,1,1),0,32,false,true,false,true,false,"DEFAULT",new BackgroundSetting(0,"",""),AppManifest.DEFAULT_CACHE_DIR);
             GsonUtils.saveLauncherSetting(launcherSetting,AppManifest.SETTING_DIR + "/launcher_setting.json");
         }
         return launcherSetting;
@@ -115,7 +117,7 @@ public class InitializeSetting {
         }
         else {
             int ram = MemoryUtils.findBestRAMAllocation(context);
-            privateGameSetting = new PrivateGameSetting(false,false,false,false,false,false,false,new JavaSetting(true,AppManifest.JAVA_DIR + "/default"),"","","",new GameDirSetting(0,AppManifest.DEFAULT_GAME_DIR),new BoatLauncherSetting(true,"GL4ES115","default"),new PojavLauncherSetting(false,"opengles2","default"),new RamSetting(ram,ram,false),"Default",1.0F);
+            privateGameSetting = new PrivateGameSetting(false,false,false,HMCLPEApplication.properties.getProperty("not-check-JVM-compatible","false").equals("true"),HMCLPEApplication.properties.getProperty("not-check-game-data-compatible","false").equals("true"),false,false,new JavaSetting(true,AppManifest.JAVA_DIR + "/default"),"","", Library.returnAddress(HMCLPEApplication.properties.getProperty("access-server-ip","nothing")),new GameDirSetting(HMCLPEApplication.properties.getProperty("enable-isolate-working-directory","false").equals("true") ? 1 : 0,AppManifest.DEFAULT_GAME_DIR),new BoatLauncherSetting(true,"GL4ES115","default"),new PojavLauncherSetting(false,"opengles2","default"),new RamSetting(ram,ram,false),"Default",1.0F);
             GsonUtils.savePrivateGameSetting(privateGameSetting,AppManifest.SETTING_DIR + "/private_game_setting.json");
         }
         return privateGameSetting;

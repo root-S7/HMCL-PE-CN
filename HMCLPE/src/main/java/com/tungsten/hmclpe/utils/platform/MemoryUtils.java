@@ -3,6 +3,8 @@ package com.tungsten.hmclpe.utils.platform;
 import android.app.ActivityManager;
 import android.content.Context;
 
+import com.tungsten.hmclpe.launcher.HMCLPEApplication;
+
 public class MemoryUtils {
 
     public static int getTotalDeviceMemory(Context ctx){
@@ -20,6 +22,8 @@ public class MemoryUtils {
     }
 
     public static int findBestRAMAllocation(Context context) {
+        if(HMCLPEApplication.properties.getProperty("set-memory") != null && HMCLPEApplication.properties.getProperty("set-memory").matches("\\d+") && Integer.parseInt(HMCLPEApplication.properties.getProperty("set-memory")) >= 1536) return Integer.parseInt(HMCLPEApplication.properties.getProperty("set-memory","2048"));
+
         int totalDeviceMemory = getTotalDeviceMemory(context);
         if (totalDeviceMemory <= 3072) {
             return 1300;

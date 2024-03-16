@@ -204,13 +204,13 @@ public class AboutUsUI extends BaseUI implements View.OnClickListener {
         }
 
         if (view == discord) {
-            uri = Uri.parse(HMCLPEApplication.properties.getProperty("discord"));
+            uri = Uri.parse(HMCLPEApplication.properties.getProperty("discord","https://icraft.ren:90/titles/Discord"));
         }
         if (view == qqChannel) {
-            uri = Uri.parse(HMCLPEApplication.properties.getProperty("qq-discord"));
+            uri = Uri.parse(HMCLPEApplication.properties.getProperty("qq-discord","https://icraft.ren:90/titles/QQGroup"));
         }
         if (view == qq) {
-            FeedbackUI.joinQQGroup(context, HMCLPEApplication.properties.getProperty("qq-group-key"));
+            FeedbackUI.joinQQGroup(context, HMCLPEApplication.properties.getProperty("qq-group-key","tUFbF4hOV-O0Xykwx0VyxISWgKyf8gqe"));
         }
 
         if (view == libHmcl) {

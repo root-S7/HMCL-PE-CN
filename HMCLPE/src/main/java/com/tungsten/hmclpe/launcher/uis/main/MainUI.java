@@ -47,7 +47,6 @@ public class MainUI extends BaseUI implements View.OnClickListener, AdapterView.
     private LinearLayout startGameManagerUI;
     private LinearLayout startVersionListUI;
     private LinearLayout startDownloadUI;
-    private LinearLayout startMultiPlayerUI;
     private LinearLayout startSettingUI;
 
     private LinearLayout startGame;
@@ -82,7 +81,6 @@ public class MainUI extends BaseUI implements View.OnClickListener, AdapterView.
         startGameManagerUI = activity.findViewById(R.id.start_ui_game_manager);
         startVersionListUI = activity.findViewById(R.id.start_ui_version_list);
         startDownloadUI = activity.findViewById(R.id.start_ui_download);
-        startMultiPlayerUI = activity.findViewById(R.id.start_ui_multi_player);
         startSettingUI = activity.findViewById(R.id.start_ui_setting);
 
         startGame = activity.findViewById(R.id.launcher_play_button);
@@ -100,14 +98,12 @@ public class MainUI extends BaseUI implements View.OnClickListener, AdapterView.
         //icon
         versionListIcon = activity.findViewById(R.id.version_list_icon);
         downloadIcon = activity.findViewById(R.id.download_icon);
-        multiplayerIcon = activity.findViewById(R.id.multiplayer_icon);
         settingIcon = activity.findViewById(R.id.setting_icon);
 
         startAccountUI.setOnClickListener(this);
         startGameManagerUI.setOnClickListener(this);
         startVersionListUI.setOnClickListener(this);
         startDownloadUI.setOnClickListener(this);
-        startMultiPlayerUI.setOnClickListener(this);
         startSettingUI.setOnClickListener(this);
 
         startGame.setOnClickListener(this);
@@ -238,9 +234,6 @@ public class MainUI extends BaseUI implements View.OnClickListener, AdapterView.
         }
         if (v == startDownloadUI){
             activity.uiManager.switchMainUI(activity.uiManager.downloadUI);
-        }
-        if (v == startMultiPlayerUI){
-            activity.uiManager.switchMainUI(activity.uiManager.multiPlayerUI);
         }
         if (v == startSettingUI){
             activity.uiManager.switchMainUI(activity.uiManager.settingUI);

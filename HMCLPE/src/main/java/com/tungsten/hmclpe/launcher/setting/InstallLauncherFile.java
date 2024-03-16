@@ -125,9 +125,9 @@ public class InstallLauncherFile {
 
         if(!("完成".equals(HMCLPEApplication.appOtherConfig.getString("installAdditionalFiles","未找到字段"))) || !new File(AppManifest.LAUNCHER_DIR).exists() || !new File(AppManifest.DEFAULT_GAME_DIR + "/version").exists() || !Objects.equals(FileStringUtils.getStringFromFile(AppManifest.DEFAULT_GAME_DIR + "/version"), AssetsUtils.readAssetsTxt(activity, ".minecraft/version"))){
             try(BufferedWriter bfw=new BufferedWriter(new FileWriter(AppManifest.DEFAULT_RUNTIME_DIR + "/resolv.conf"))) {
-                bfw.write("nameserver 223.5.5.5");
+                bfw.write("nameserver " + HMCLPEApplication.properties.getProperty("primary-nameserver","223.5.5.5"));
                 bfw.newLine();
-                bfw.write("nameserver 114.114.114.114");
+                bfw.write("nameserver " + HMCLPEApplication.properties.getProperty("secondary-nameserver","8.8.8.8"));
                 bfw.flush();
             } catch (IOException e) {
                 e.printStackTrace();

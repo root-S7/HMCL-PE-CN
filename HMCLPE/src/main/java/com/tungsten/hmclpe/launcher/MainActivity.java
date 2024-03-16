@@ -428,7 +428,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void showEula() {
-        if ("true".equals(HMCLPEApplication.properties.getProperty("enable-announcement"))) {
+        if ("true".equals(HMCLPEApplication.properties.getProperty("enable-announcement","true"))) {
             FirstLaunchDialog dialog = new FirstLaunchDialog(this);
             dialog.show();
         }

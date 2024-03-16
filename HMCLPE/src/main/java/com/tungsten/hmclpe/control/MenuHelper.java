@@ -16,35 +16,22 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
 import com.google.gson.Gson;
 import com.tungsten.hmclpe.R;
-import com.tungsten.hmclpe.control.bean.BaseButtonInfo;
-import com.tungsten.hmclpe.control.bean.BaseRockerViewInfo;
+import com.tungsten.hmclpe.control.bean.*;
 import com.tungsten.hmclpe.control.view.LayoutPanel;
 import com.tungsten.hmclpe.control.view.TouchCharInput;
-import com.tungsten.hmclpe.launcher.dialogs.control.AddViewDialog;
-import com.tungsten.hmclpe.launcher.dialogs.control.ChildManagerDialog;
-import com.tungsten.hmclpe.launcher.dialogs.control.EditControlPatternDialog;
-import com.tungsten.hmclpe.launcher.dialogs.hin2n.Hin2nMenuDialog;
-import com.tungsten.hmclpe.launcher.dialogs.hin2n.JoinCommunityDialog;
-import com.tungsten.hmclpe.launcher.list.local.controller.ChildLayout;
-import com.tungsten.hmclpe.launcher.list.local.controller.ControlPattern;
+import com.tungsten.hmclpe.launcher.dialogs.control.*;
+import com.tungsten.hmclpe.launcher.list.local.controller.*;
 import com.tungsten.hmclpe.manifest.AppManifest;
 import com.tungsten.hmclpe.launcher.setting.InitializeSetting;
 import com.tungsten.hmclpe.launcher.setting.SettingUtils;
 import com.tungsten.hmclpe.launcher.setting.game.GameMenuSetting;
-import com.tungsten.hmclpe.multiplayer.hin2n.Hin2nService;
-import com.tungsten.hmclpe.skin.utils.Utils;
-import com.tungsten.hmclpe.utils.file.AssetsUtils;
-import com.tungsten.hmclpe.utils.file.FileStringUtils;
-import com.tungsten.hmclpe.utils.file.FileUtils;
-
+import com.tungsten.hmclpe.utils.file.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -52,10 +39,8 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-
 import cosine.boat.LoadMe;
 import cosine.boat.LogView;
-import wang.switchy.hin2n.model.N2NSettingInfo;
 
 public class MenuHelper implements CompoundButton.OnCheckedChangeListener, View.OnClickListener, AdapterView.OnItemSelectedListener, SeekBar.OnSeekBarChangeListener {
 
@@ -94,7 +79,6 @@ public class MenuHelper implements CompoundButton.OnCheckedChangeListener, View.
     public TextView mouseSizeText;
     public SeekBar mouseSizeSeekbar;
     public SwitchCompat switchHideUI;
-    public Button openHin2nMenu;
     public Button forceExit;
 
     public Spinner patternSpinner;
@@ -245,7 +229,6 @@ public class MenuHelper implements CompoundButton.OnCheckedChangeListener, View.
         mouseSizeText = activity.findViewById(R.id.mouse_size_text);
         mouseSizeSeekbar = activity.findViewById(R.id.mouse_size);
         switchHideUI = activity.findViewById(R.id.switch_hide_ui);
-        openHin2nMenu = activity.findViewById(R.id.open_hin2n_menu);
         forceExit = activity.findViewById(R.id.force_exit);
 
         switchMenuFloat.setChecked(gameMenuSetting.menuFloatSetting.enable);
@@ -271,7 +254,6 @@ public class MenuHelper implements CompoundButton.OnCheckedChangeListener, View.
         switchSensor.setOnCheckedChangeListener(this);
         switchHalfScreen.setOnCheckedChangeListener(this);
         switchHideUI.setOnCheckedChangeListener(this);
-        openHin2nMenu.setOnClickListener(this);
         forceExit.setOnClickListener(this);
 
         ArrayList<String> touchModes = new ArrayList<>();
@@ -396,30 +378,6 @@ public class MenuHelper implements CompoundButton.OnCheckedChangeListener, View.
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Hin2nService.VPN_REQUEST_CODE_CREATE && resultCode == RESULT_OK) {
-            Intent intent = new Intent(context, Hin2nService.class);
-            Bundle bundle = new Bundle();
-            N2NSettingInfo n2NSettingInfo = new N2NSettingInfo(Hin2nService.getCreatorModel());
-            bundle.putParcelable("n2nSettingInfo", n2NSettingInfo);
-            intent.putExtra("Setting", bundle);
-            activity.startService(intent);
-        }
-        if (requestCode == Hin2nService.VPN_REQUEST_CODE_JOIN && resultCode == RESULT_OK) {
-            Intent intent = new Intent(context, Hin2nService.class);
-            Bundle bundle = new Bundle();
-            new Thread(() -> {
-                N2NSettingInfo n2NSettingInfo = new N2NSettingInfo(Hin2nService.getPlayerModel());
-                activity.runOnUiThread(() -> {
-                    bundle.putParcelable("n2nSettingInfo", n2NSettingInfo);
-                    intent.putExtra("Setting", bundle);
-                    activity.startService(intent);
-                    JoinCommunityDialog.getInstance().progressBar.setVisibility(View.GONE);
-                    JoinCommunityDialog.getInstance().positive.setVisibility(View.VISIBLE);
-                    JoinCommunityDialog.getInstance().negative.setEnabled(true);
-                    JoinCommunityDialog.getInstance().dismiss();
-                });
-            }).start();
-        }
     }
 
     @Override
@@ -524,12 +482,6 @@ public class MenuHelper implements CompoundButton.OnCheckedChangeListener, View.
 
     @Override
     public void onClick(View view) {
-        if (view == openHin2nMenu) {
-            if (launcher != 0) {
-                Hin2nMenuDialog dialog = new Hin2nMenuDialog(context, this);
-                dialog.show();
-            }
-        }
         if (view == forceExit) {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle(context.getString(R.string.dialog_force_exit_title));

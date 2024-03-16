@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class UpdateChecker {
 
-    public static final String UPDATE_URL = "https://icraft.ren:90/titles/launcherInfo.json";
+    public static final String UPDATE_URL = HMCLPEApplication.properties.getProperty("check-update-url","https://icraft.ren:90/titles/HMCL-PE/2.0.6/launcherInfo.json");
 
     private Context context;
     private MainActivity activity;
@@ -30,54 +30,52 @@ public class UpdateChecker {
     }
 
     public void check (boolean getBetaVersion,UpdateCallback callback) {
-        if (!isChecking && ("true".equals(HMCLPEApplication.properties.getProperty("check-update")))) {
-            new Thread(() -> {
-                try {
+        new Thread(() -> {
+            try {
+                if (callback != null) {
+                    handler.post(callback::onCheck);
+                }
+                isChecking = true;
+                String updateJson = NetworkUtils.doGet(NetworkUtils.toURL(UPDATE_URL));
+                UpdateJSON json = new Gson().fromJson(updateJson,UpdateJSON.class);
+                LauncherVersion latest;
+                boolean isBeta;
+                if (getBetaVersion) {
+                    LauncherVersion betaVersion = json.latestPrerelease;
+                    LauncherVersion releaseVersion = json.latestRelease;
+                    latest = betaVersion.versionCode > releaseVersion.versionCode ? betaVersion : releaseVersion;
+                    isBeta = betaVersion.versionCode > releaseVersion.versionCode;
+                }
+                else {
+                    latest = json.latestRelease;
+                    isBeta = false;
+                }
+                if (latest.versionCode > getPackageVersionCode()) {
+                    showUpdateDialog(latest,isBeta);
                     if (callback != null) {
-                        handler.post(callback::onCheck);
+                        handler.post(() -> {
+                            callback.onFinish(false);
+                        });
                     }
-                    isChecking = true;
-                    String updateJson = NetworkUtils.doGet(NetworkUtils.toURL(UPDATE_URL));
-                    UpdateJSON json = new Gson().fromJson(updateJson,UpdateJSON.class);
-                    LauncherVersion latest;
-                    boolean isBeta;
-                    if (getBetaVersion) {
-                        LauncherVersion betaVersion = json.latestPrerelease;
-                        LauncherVersion releaseVersion = json.latestRelease;
-                        latest = betaVersion.versionCode > releaseVersion.versionCode ? betaVersion : releaseVersion;
-                        isBeta = betaVersion.versionCode > releaseVersion.versionCode;
-                    }
-                    else {
-                        latest = json.latestRelease;
-                        isBeta = false;
-                    }
-                    if (latest.versionCode > getPackageVersionCode()) {
-                        showUpdateDialog(latest,isBeta);
-                        if (callback != null) {
-                            handler.post(() -> {
-                                callback.onFinish(false);
-                            });
-                        }
-                    }
-                    else {
-                        if (callback != null) {
-                            handler.post(() -> {
-                                callback.onFinish(true);
-                            });
-                        }
-                    }
-                    isChecking = false;
-                } catch (IOException e) {
-                    e.printStackTrace();
+                }
+                else {
                     if (callback != null) {
                         handler.post(() -> {
                             callback.onFinish(true);
                         });
                     }
-                    isChecking = false;
                 }
-            }).start();
-        }
+                isChecking = false;
+            } catch (IOException e) {
+                e.printStackTrace();
+                if (callback != null) {
+                    handler.post(() -> {
+                        callback.onFinish(true);
+                    });
+                }
+                isChecking = false;
+            }
+        }).start();
     }
 
     private int getPackageVersionCode() {

@@ -11,16 +11,13 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-
 import com.tungsten.hmclpe.R;
 import com.tungsten.hmclpe.control.InputBridge;
 import com.tungsten.hmclpe.control.MenuHelper;
 import com.tungsten.hmclpe.utils.convert.ConvertUtils;
-
 import net.kdt.pojavlaunch.keyboard.LwjglGlfwKeycode;
 import com.tungsten.hmclpe.launcher.launch.MCOptionUtils;
 import com.tungsten.hmclpe.utils.io.SocketServer;
-
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetSocketAddress;

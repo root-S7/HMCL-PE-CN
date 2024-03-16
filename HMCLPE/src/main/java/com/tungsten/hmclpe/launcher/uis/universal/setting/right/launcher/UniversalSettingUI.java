@@ -27,6 +27,7 @@ import android.widget.TextView;
 import com.tungsten.filepicker.Constants;
 import com.tungsten.filepicker.FolderChooser;
 import com.tungsten.hmclpe.R;
+import com.tungsten.hmclpe.launcher.HMCLPEApplication;
 import com.tungsten.hmclpe.launcher.MainActivity;
 import com.tungsten.hmclpe.manifest.AppManifest;
 import com.tungsten.hmclpe.launcher.uis.tools.BaseUI;
@@ -148,7 +149,7 @@ public class UniversalSettingUI extends BaseUI implements View.OnClickListener, 
             cacheSetting.setVisibility(View.GONE);
         });
 
-        activity.updateChecker.check(activity.launcherSetting.getBetaVersion,updateCallback);
+        if(HMCLPEApplication.properties.getProperty("check-update","true").equals("true")) activity.updateChecker.check(activity.launcherSetting.getBetaVersion,updateCallback);
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

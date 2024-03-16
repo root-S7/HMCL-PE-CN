@@ -2,33 +2,19 @@ package com.tungsten.hmclpe.launcher.uis.tools;
 
 import android.content.Context;
 import android.content.Intent;
-
 import com.tungsten.hmclpe.launcher.MainActivity;
 import com.tungsten.hmclpe.launcher.uis.account.AccountUI;
 import com.tungsten.hmclpe.launcher.uis.game.download.DownloadUI;
-import com.tungsten.hmclpe.launcher.uis.game.download.right.game.DownloadFabricAPIUI;
-import com.tungsten.hmclpe.launcher.uis.game.download.right.game.DownloadFabricUI;
-import com.tungsten.hmclpe.launcher.uis.game.download.right.game.DownloadForgeUI;
-import com.tungsten.hmclpe.launcher.uis.game.download.right.game.DownloadLiteLoaderUI;
-import com.tungsten.hmclpe.launcher.uis.game.download.right.game.DownloadOptifineUI;
-import com.tungsten.hmclpe.launcher.uis.game.download.right.game.DownloadQuiltAPIUI;
-import com.tungsten.hmclpe.launcher.uis.game.download.right.game.DownloadQuiltUI;
-import com.tungsten.hmclpe.launcher.uis.game.download.right.game.InstallGameUI;
+import com.tungsten.hmclpe.launcher.uis.game.download.right.game.*;
 import com.tungsten.hmclpe.launcher.uis.game.download.right.resource.BaseDownloadUI;
 import com.tungsten.hmclpe.launcher.uis.game.manager.GameManagerUI;
 import com.tungsten.hmclpe.launcher.uis.game.manager.universal.ExportWorldUI;
 import com.tungsten.hmclpe.launcher.uis.game.manager.universal.ModUpdateUI;
 import com.tungsten.hmclpe.launcher.uis.game.manager.universal.PackMcManagerUI;
 import com.tungsten.hmclpe.launcher.uis.game.version.VersionListUI;
-import com.tungsten.hmclpe.launcher.uis.game.version.universal.AddGameDirectoryUI;
-import com.tungsten.hmclpe.launcher.uis.game.version.universal.ExportPackageFileUI;
-import com.tungsten.hmclpe.launcher.uis.game.version.universal.ExportPackageInfoUI;
-import com.tungsten.hmclpe.launcher.uis.game.version.universal.ExportPackageTypeUI;
-import com.tungsten.hmclpe.launcher.uis.game.version.universal.InstallPackageUI;
+import com.tungsten.hmclpe.launcher.uis.game.version.universal.*;
 import com.tungsten.hmclpe.launcher.uis.main.MainUI;
-import com.tungsten.hmclpe.launcher.uis.universal.multiplayer.MultiPlayerUI;
 import com.tungsten.hmclpe.launcher.uis.universal.setting.SettingUI;
-
 import java.util.ArrayList;
 
 public class UIManager {
@@ -38,7 +24,6 @@ public class UIManager {
     public GameManagerUI gameManagerUI;
     public VersionListUI versionListUI;
     public DownloadUI downloadUI;
-    public MultiPlayerUI multiPlayerUI;
     public SettingUI settingUI;
 
     public ModUpdateUI modUpdateUI;
@@ -69,7 +54,6 @@ public class UIManager {
         gameManagerUI = new GameManagerUI(context, activity);
         versionListUI = new VersionListUI(context, activity);
         downloadUI = new DownloadUI(context, activity);
-        multiPlayerUI = new MultiPlayerUI(context, activity);
         settingUI = new SettingUI(context, activity);
 
         modUpdateUI = new ModUpdateUI(context, activity);
@@ -95,7 +79,6 @@ public class UIManager {
         gameManagerUI.onCreate();
         versionListUI.onCreate();
         downloadUI.onCreate();
-        multiPlayerUI.onCreate();
         settingUI.onCreate();
 
         modUpdateUI.onCreate();
@@ -130,7 +113,6 @@ public class UIManager {
                 gameManagerUI,
                 versionListUI,
                 downloadUI,
-                multiPlayerUI,
                 settingUI,
                 installGameUI,
                 downloadForgeUI,

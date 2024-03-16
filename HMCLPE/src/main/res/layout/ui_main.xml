@@ -250,35 +250,6 @@
             <LinearLayout
                 android:background="@drawable/launcher_button_parent"
                 android:focusable="true"
-                android:id="@+id/start_ui_multi_player"
-                android:clickable="true"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
-
-                <ImageView
-                    android:id="@+id/multiplayer_icon"
-                    android:layout_gravity="center"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/ic_command"/>
-
-                <TextView
-                    android:singleLine="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="35dp"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:layout_marginStart="6dp"
-                    android:text="@string/launcher_scroll_multi_player"
-                    android:textSize="@dimen/text_size_middle"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:background="@drawable/launcher_button_parent"
-                android:focusable="true"
                 android:layout_marginBottom="5dp"
                 android:id="@+id/start_ui_setting"
                 android:clickable="true"
