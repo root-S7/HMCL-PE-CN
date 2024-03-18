@@ -42,19 +42,21 @@ public class AssetsUtils {
     };
 
     public static String readAssetsTxt(Context context,String fileName){
+        StringBuilder content = new StringBuilder();
+
         try {
-            InputStream is = context.getAssets().open(fileName);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            String text = new String(buffer, "utf-8");
-            Log.e("latest",text);
-            return text;
+            InputStream inputStream = context.getAssets().open(fileName);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            String line;
+            while ((line = reader.readLine()) != null) content.append(line).append("\n");
+            reader.close();
+            inputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+
+        return content.toString();
     }
 
     public AssetsUtils copyAssetsToSD(final String srcPath, final String sdPath) {

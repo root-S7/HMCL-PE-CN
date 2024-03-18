@@ -2,8 +2,10 @@ package com.tungsten.hmclpe.utils.file;
 
 import android.util.Log;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -11,18 +13,16 @@ import java.util.regex.Pattern;
 
 public class FileStringUtils {
     public static String getStringFromFile(String path){
-        try {
-            FileInputStream inputStream = new FileInputStream(path);
-            byte[] bytes = new byte[inputStream.available()];
-            inputStream.read(bytes);
-            inputStream.close();
-            String string = new String(bytes);
-            return string;
+        StringBuilder content = new StringBuilder();
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(path))){
+            String line;
+            while ((line = reader.readLine()) != null) content.append(line).append("\n");
+        }catch (IOException e){
+            e.printStackTrace();
         }
-        catch (Exception e){
-            System.out.println(e);
-        }
-        return null;
+
+        return content.toString();
     }
 
     public static void writeFile(String path,String string){
