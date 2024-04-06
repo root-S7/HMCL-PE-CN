@@ -6,7 +6,7 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "ren.icraft.hmclpe"
+        applicationId "com.mojang.minecraftpe"
         minSdk 26
         targetSdk 34
         versionCode 13

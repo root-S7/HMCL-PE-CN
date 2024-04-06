@@ -18,31 +18,20 @@ import android.os.Environment;
 import android.provider.Settings;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
-
+import android.widget.*;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import com.tungsten.filepicker.Constants;
-import com.tungsten.filepicker.FileChooser;
 import com.tungsten.hmclpe.R;
-import com.tungsten.hmclpe.launcher.setting.InitializeSetting;
-import com.tungsten.hmclpe.launcher.setting.InstallLauncherFile;
+import com.tungsten.hmclpe.launcher.setting.*;
 import com.tungsten.hmclpe.launcher.setting.launcher.LauncherSetting;
 import com.tungsten.hmclpe.manifest.AppManifest;
-import com.tungsten.hmclpe.utils.LocaleUtils;
-import com.tungsten.hmclpe.utils.file.UriUtils;
+import com.tungsten.hmclpe.utils.*;
 import com.tungsten.hmclpe.utils.io.FileUtils;
-
 import org.json.JSONObject;
-
 import java.io.File;
 
 @SuppressLint("CustomSplashScreen")
@@ -59,6 +48,8 @@ public class SplashActivity extends AppCompatActivity {
 
     public LauncherSetting launcherSetting;
 
+    private PermissionUtils permissionUtils;
+    private final String[] legacyAccessFilesPermission = {Manifest.permission.READ_EXTERNAL_STORAGE,Manifest.permission.WRITE_EXTERNAL_STORAGE};
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +63,8 @@ public class SplashActivity extends AppCompatActivity {
         titleTextSecond = findViewById(R.id.title_text_second);
         titleTextThird = findViewById(R.id.title_text_third);
         background = findViewById(R.id.background);
+
+        permissionUtils = new PermissionUtils(this);
 
         initTheme();
         requestPermission();
@@ -131,22 +124,21 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void requestPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             // 先判断有没有权限
-            if (Environment.isExternalStorageManager()) {
+            if(Environment.isExternalStorageManager()) {
                 init();
-            } else {
+            }else {
                 Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
                 intent.setData(Uri.parse("package:" + getPackageName()));
-                startActivityForResult(intent, 1000);
+                startActivityForResult(intent, 1);
             }
-        } else {
+        }else {
             // 先判断有没有权限
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if(ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 init();
-            } else {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1000);
+            }else {
+                ActivityCompat.requestPermissions(this, legacyAccessFilesPermission, 1);
             }
         }
     }
@@ -173,37 +165,49 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        //通过requestCode来识别是否同一个请求
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1000) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //用户同意，执行操作
-                init();
-            } else {
-                //用户不同意，向用户展示该权限作用
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                    alert.setCancelable(false).setMessage(R.string.storage_permissions_remind).setPositiveButton("授予权限", (dialog1, which) -> ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1000)).setNegativeButton("关闭应用", (dialog2, which) -> System.exit(0));
-                    final AlertDialog dialog = alert.create();
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.show();
-                }
-            }
+        if (requestCode == 1) {
+            if(!(ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
+                permissionUtils.showAlertDialogPermission("检测到无权限", "请授予应用必要权限否则无法使用！", "授予权限", "关闭", (dialogInterface, i) -> {
+                    if(permissionUtils.isAlwaysNoPermission(permissionUtils.getNoPermissionList(legacyAccessFilesPermission))){
+                        Intent intent = new Intent();
+                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        intent.setData(Uri.fromParts("package", permissionUtils.getActivity().getPackageName(),null));
+                        startActivityForResult(intent,2);
+                    }else requestPermission();
+                    dialogInterface.dismiss();
+                }, (dialogInterface, i) -> System.exit(1));
+            }else init();
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1000 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (requestCode == 1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (Environment.isExternalStorageManager()) {
                 init();
             } else {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                alert.setCancelable(false).setMessage(R.string.storage_permissions_remind).setPositiveButton("授予权限", (dialog1, which) -> requestPermission()).setNegativeButton("关闭应用", (dialog2, which) -> System.exit(0));
+                alert.setCancelable(false).setMessage(R.string.storage_permissions_remind).setPositiveButton("授予权限", (dialog1, which) -> {
+                    dialog1.dismiss();
+                    requestPermission();
+                }).setNegativeButton("关闭应用", (dialog2, which) -> System.exit(0));
                 final AlertDialog dialog = alert.create();
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
+            }
+        }else if (requestCode == 2) {
+            if(!(ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
+                permissionUtils.showAlertDialogPermission("检测到无权限", "请授予应用必要权限否则无法使用！", "授予权限", "关闭", (dialogInterface, i) -> {
+                    if(permissionUtils.isAlwaysNoPermission(permissionUtils.getNoPermissionList(legacyAccessFilesPermission))){
+                        Intent intent = new Intent();
+                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        intent.setData(Uri.fromParts("package", permissionUtils.getActivity().getPackageName(),null));
+                        startActivityForResult(intent,2);
+                    }else requestPermission();
+                    dialogInterface.dismiss();
+                }, (dialogInterface, i) -> System.exit(1));
             }
         }
     }

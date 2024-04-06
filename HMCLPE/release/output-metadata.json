@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "ren.icraft.hmclpe",
+  "applicationId": "com.mojang.minecraftpe",
   "variantName": "release",
   "elements": [
     {
