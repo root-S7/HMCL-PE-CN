@@ -3,7 +3,6 @@ package com.tungsten.hmclpe.launcher;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -36,6 +35,8 @@ import java.io.File;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
+
+    private AlertDialog dialog;
 
     public ProgressBar loadingProgress;
     public TextView loadingText;
@@ -144,6 +145,8 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void init() {
+        if(dialog != null) dialog.dismiss();
+
         new Thread(() -> {
             AppManifest.initializeManifest(SplashActivity.this);
             launcherSetting = InitializeSetting.initializeLauncherSetting();
@@ -167,49 +170,44 @@ public class SplashActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1) {
-            if(!(ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
-                permissionUtils.showAlertDialogPermission("检测到无权限", "请授予应用必要权限否则无法使用！", "授予权限", "关闭", (dialogInterface, i) -> {
-                    if(permissionUtils.isAlwaysNoPermission(permissionUtils.getNoPermissionList(legacyAccessFilesPermission))){
-                        Intent intent = new Intent();
-                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        intent.setData(Uri.fromParts("package", permissionUtils.getActivity().getPackageName(),null));
-                        startActivityForResult(intent,2);
-                    }else requestPermission();
-                    dialogInterface.dismiss();
-                }, (dialogInterface, i) -> System.exit(1));
+            // 检查是否授予了所有必要权限
+            if(!hasAllPermissionsGranted()) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.setCancelable(false).setMessage(R.string.storage_permissions_remind).setPositiveButton("授予权限", (dialog1, which) -> {
+                    dialog1.dismiss();
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                    intent.setData(Uri.fromParts("package", permissionUtils.getActivity().getPackageName(),null));
+                    startActivityForResult(intent,2);
+                }).setNegativeButton("关闭应用", (dialog2, which) -> System.exit(0));
+                dialog = alert.create();
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.show();
             }else init();
         }
+    }
+
+    private boolean hasAllPermissionsGranted() {
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (Environment.isExternalStorageManager()) {
+            if(Environment.isExternalStorageManager()) {
                 init();
-            } else {
+            }else {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.setCancelable(false).setMessage(R.string.storage_permissions_remind).setPositiveButton("授予权限", (dialog1, which) -> {
                     dialog1.dismiss();
                     requestPermission();
                 }).setNegativeButton("关闭应用", (dialog2, which) -> System.exit(0));
-                final AlertDialog dialog = alert.create();
+                dialog = alert.create();
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.show();
             }
-        }else if (requestCode == 2) {
-            if(!(ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)) {
-                permissionUtils.showAlertDialogPermission("检测到无权限", "请授予应用必要权限否则无法使用！", "授予权限", "关闭", (dialogInterface, i) -> {
-                    if(permissionUtils.isAlwaysNoPermission(permissionUtils.getNoPermissionList(legacyAccessFilesPermission))){
-                        Intent intent = new Intent();
-                        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                        intent.setData(Uri.fromParts("package", permissionUtils.getActivity().getPackageName(),null));
-                        startActivityForResult(intent,2);
-                    }else requestPermission();
-                    dialogInterface.dismiss();
-                }, (dialogInterface, i) -> System.exit(1));
-            }
-        }
+        }else if(requestCode == 2) requestPermission();
     }
 
     @Override
