@@ -123,7 +123,7 @@ public class InstallLauncherFile {
     public static void checkExtraFiles(SplashActivity activity, AssetsUtils.ProgressCallback callback){
         activity.runOnUiThread(() -> activity.loadingText.setText("安装游戏资源中…"));
 
-        if(!("完成".equals(HMCLPEApplication.appOtherConfig.getString("installAdditionalFiles","未找到字段"))) || !new File(AppManifest.LAUNCHER_DIR).exists() || !new File(AppManifest.DEFAULT_GAME_DIR + "/version").exists() || !Objects.equals(FileStringUtils.getStringFromFile(AppManifest.DEFAULT_GAME_DIR + "/version"), AssetsUtils.readAssetsTxt(activity, ".minecraft/version"))){
+        if(!new File(AppManifest.LAUNCHER_DIR).exists() || !new File(AppManifest.DEFAULT_GAME_DIR + "/version").exists() || !Objects.equals(FileStringUtils.getStringFromFile(AppManifest.DEFAULT_GAME_DIR + "/version"), AssetsUtils.readAssetsTxt(activity, ".minecraft/version"))){
             try(BufferedWriter bfw=new BufferedWriter(new FileWriter(AppManifest.DEFAULT_RUNTIME_DIR + "/resolv.conf"))) {
                 bfw.write("nameserver " + HMCLPEApplication.properties.getProperty("primary-nameserver","223.5.5.5"));
                 bfw.newLine();
@@ -156,9 +156,6 @@ public class InstallLauncherFile {
         activity.loadingText.setText(activity.getString(R.string.loading_hint_ready));
         activity.loadingProgress.setProgress(100);
         activity.loadingProgressText.setText("100 %");
-
-        edit.putString("installAdditionalFiles","完成");
-        edit.apply();
 
         Intent intent = new Intent(activity,MainActivity.class);
         Bundle bundle = new Bundle();

@@ -16,5 +16,22 @@
       "outputFile": "HMCL-PE_v2.0.8.APK"
     }
   ],
-  "elementType": "File"
+  "elementType": "File",
+  "baselineProfiles": [
+    {
+      "minApi": 28,
+      "maxApi": 30,
+      "baselineProfiles": [
+        "baselineProfiles/1/HMCL-PE_v2.0.8.dm"
+      ]
+    },
+    {
+      "minApi": 31,
+      "maxApi": 2147483647,
+      "baselineProfiles": [
+        "baselineProfiles/0/HMCL-PE_v2.0.8.dm"
+      ]
+    }
+  ],
+  "minSdkVersionForDexing": 26
 }
