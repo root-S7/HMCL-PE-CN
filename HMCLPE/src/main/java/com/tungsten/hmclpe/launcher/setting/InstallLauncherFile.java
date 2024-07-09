@@ -121,9 +121,7 @@ public class InstallLauncherFile {
 
     @SuppressLint("SetTextI18n")
     public static void checkExtraFiles(SplashActivity activity, AssetsUtils.ProgressCallback callback){
-        activity.runOnUiThread(() -> activity.loadingText.setText("安装游戏资源中…"));
-
-        if(!new File(AppManifest.LAUNCHER_DIR).exists() || !new File(AppManifest.DEFAULT_GAME_DIR + "/version").exists() || !Objects.equals(FileStringUtils.getStringFromFile(AppManifest.DEFAULT_GAME_DIR + "/version"), AssetsUtils.readAssetsTxt(activity, ".minecraft/version"))){
+        if(!new File(AppManifest.LAUNCHER_DIR).exists() || !new File(AppManifest.DEFAULT_GAME_DIR + "/version").exists() || !Objects.equals(FileStringUtils.getStringFromFile(AppManifest.DEFAULT_GAME_DIR + "/version"), AssetsUtils.readAssetsTxt(activity, ".minecraft/version"))) {
             try(BufferedWriter bfw=new BufferedWriter(new FileWriter(AppManifest.DEFAULT_RUNTIME_DIR + "/resolv.conf"))) {
                 bfw.write("nameserver " + HMCLPEApplication.properties.getProperty("primary-nameserver","223.5.5.5"));
                 bfw.newLine();
@@ -134,6 +132,7 @@ public class InstallLauncherFile {
             }
             deleteMinecraftFiles(activity);
             //释放游戏资源
+            activity.runOnUiThread(() -> activity.loadingText.setText("安装游戏资源中…"));
             AssetsUtils.getInstance(activity).setProgressCallback(callback).copyOnMainThread(".minecraft",AppManifest.DEFAULT_GAME_DIR);
             AssetsUtils.getInstance(activity.getApplicationContext()).copyAssetsToSD("authlib_injector_server.json", AppManifest.ACCOUNT_DIR + "/authlib_injector_server.json");
         }
@@ -145,7 +144,7 @@ public class InstallLauncherFile {
         activity.runOnUiThread(() -> {
             activity.loadingProgress.setProgress(0);
             activity.loadingProgressText.setText("0 %");
-            activity.loadingText.setText("正在删除原公有目录游戏资源中,请稍等…");
+            activity.loadingText.setText("正在删除旧客户端数据中,请稍等…");
         });
         //删除原公有目录游戏资源
         FileUtils.deleteDirectoryOnMainThread(AppManifest.DEFAULT_GAME_DIR,activity.loadingProgress,activity.loadingProgressText,activity);
