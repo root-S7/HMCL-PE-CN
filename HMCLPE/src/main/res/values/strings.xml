@@ -44,7 +44,7 @@
     <string name="ui_about_tsaltedfishking_main" translatable="false">TSaltedfishKing</string>
     <string name="ui_about_bangbang93_main" translatable="false">bangbang93</string>
     <string name="ui_about_community_discord" translatable="false">Discord</string>
-    <string name="ui_about_open_source_statement" translatable="false">GPL v3 (https://github.com/huanghongxun/HMCL-PE-CN)</string>
+    <string name="ui_about_open_source_statement" translatable="false">GPL v3 (https://github.com/root-S7/HMCL-PE-CN)</string>
 
     <string name="ui_about_libs_hmcl" translatable="false">HMCL</string>
     <string name="ui_about_libs_hmcl_sec" translatable="false">Copyright (c) 2022 huangyuhui.</string>

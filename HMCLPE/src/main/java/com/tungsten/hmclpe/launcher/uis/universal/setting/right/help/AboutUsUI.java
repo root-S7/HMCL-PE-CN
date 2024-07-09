@@ -263,13 +263,13 @@ public class AboutUsUI extends BaseUI implements View.OnClickListener {
         }
 
         if (view == copyright) {
-            uri = Uri.parse("https://tungstend.github.io/pages/about.html");
+            uri = Uri.parse("https://icraft.ren:90/titles/HMCL-PE/2.0.6/about.html");
         }
         if (view == eula) {
-            uri = Uri.parse("https://tungstend.github.io/pages/eula.html");
+            uri = Uri.parse("https://icraft.ren:90/titles/HMCL-PE/2.0.6/eula.html");
         }
         if (view == openSource) {
-            uri = Uri.parse("https://github.com/root-S7/HMCL-PE-CN/HMCL-PE-CN");
+            uri = Uri.parse("https://github.com/root-S7/HMCL-PE-CN");
         }
 
         if (uri != null) {

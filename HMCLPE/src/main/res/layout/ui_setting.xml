@@ -177,7 +177,8 @@
                 android:id="@+id/start_help_ui"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_marginStart="10dp"
@@ -235,7 +236,8 @@
                 android:id="@+id/start_donate_ui"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:layout_marginStart="10dp"
