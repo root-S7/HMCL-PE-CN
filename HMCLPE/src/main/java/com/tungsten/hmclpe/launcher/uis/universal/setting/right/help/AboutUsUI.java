@@ -204,10 +204,10 @@ public class AboutUsUI extends BaseUI implements View.OnClickListener {
         }
 
         if (view == discord) {
-            uri = Uri.parse(HMCLPEApplication.properties.getProperty("discord","https://icraft.ren:90/titles/Discord"));
+            uri = Uri.parse(HMCLPEApplication.properties.getProperty("discord","https://icraft.asia:90/titles/Discord"));
         }
         if (view == qqChannel) {
-            uri = Uri.parse(HMCLPEApplication.properties.getProperty("qq-discord","https://icraft.ren:90/titles/QQGroup"));
+            uri = Uri.parse(HMCLPEApplication.properties.getProperty("qq-discord","https://icraft.asia:90/titles/QQGroup"));
         }
         if (view == qq) {
             FeedbackUI.joinQQGroup(context, HMCLPEApplication.properties.getProperty("qq-group-key","tUFbF4hOV-O0Xykwx0VyxISWgKyf8gqe"));
@@ -263,10 +263,10 @@ public class AboutUsUI extends BaseUI implements View.OnClickListener {
         }
 
         if (view == copyright) {
-            uri = Uri.parse("https://icraft.ren:90/titles/HMCL-PE/2.0.6/about.html");
+            uri = Uri.parse("https://icraft.asia:90/titles/HMCL-PE/2.0.6/about.html");
         }
         if (view == eula) {
-            uri = Uri.parse("https://icraft.ren:90/titles/HMCL-PE/2.0.6/eula.html");
+            uri = Uri.parse("https://icraft.asia:90/titles/HMCL-PE/2.0.6/eula.html");
         }
         if (view == openSource) {
             uri = Uri.parse("https://github.com/root-S7/HMCL-PE-CN");

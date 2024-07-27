@@ -20,7 +20,7 @@ public class DownloadUrlSource {
     public static int FORGE_LIBRARIES = 6;
 
     public static String[] OFFICIAL_URLS = {
-            "https://icraft.ren:90/titles/HMCL-PE/2.0.6/version_manifest.json",
+            "https://icraft.asia:90/titles/HMCL-PE/2.0.6/version_manifest.json",
             "https://piston-meta.mojang.com",
             "https://piston-data.mojang.com",
             "https://piston-meta.mojang.com",
@@ -30,7 +30,7 @@ public class DownloadUrlSource {
     };
 
     public static String[] BMCLAPI_URLS = {
-            "https://icraft.ren:90/titles/HMCL-PE/2.0.6/version_manifest.json",
+            "https://icraft.asia:90/titles/HMCL-PE/2.0.6/version_manifest.json",
             "https://bmclapi2.bangbang93.com",
             "https://bmclapi2.bangbang93.com",
             "https://bmclapi2.bangbang93.com",
@@ -40,7 +40,7 @@ public class DownloadUrlSource {
     };
 
     public static String[] MCBBS_URLS = {
-            "https://icraft.ren:90/titles/HMCL-PE/2.0.6/version_manifest.json",
+            "https://icraft.asia:90/titles/HMCL-PE/2.0.6/version_manifest.json",
             "https://download.mcbbs.net",
             "https://download.mcbbs.net",
             "https://download.mcbbs.net",
