@@ -14,7 +14,7 @@ import java.io.IOException;
 
 public class UpdateChecker {
 
-    public static final String UPDATE_URL = HMCLPEApplication.properties.getProperty("check-update-url","https://icraft.asia:90/titles/HMCL-PE/2.0.6/launcherInfo.json");
+    public static final String UPDATE_URL = HMCLPEApplication.properties.getProperty("check-update-url","https://icraft.ren:90/titles/HMCL-PE/2.0.6/launcherInfo.json");
 
     private Context context;
     private MainActivity activity;

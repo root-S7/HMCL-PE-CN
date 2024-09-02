@@ -3,7 +3,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
-        jcenter() // Warning: this repository is going to shut down soon
+        jcenter {url 'https://maven.aliyun.com/repository/public'}
         maven { url 'https://www.jitpack.io' }
     }
 }

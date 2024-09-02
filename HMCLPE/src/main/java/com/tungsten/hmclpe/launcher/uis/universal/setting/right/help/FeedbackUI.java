@@ -87,12 +87,12 @@ public class FeedbackUI extends BaseUI implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v == joinDiscord) {
-            Uri uri = Uri.parse(HMCLPEApplication.properties.getProperty("discord","https://icraft.asia:90/titles/Discord"));
+            Uri uri = Uri.parse(HMCLPEApplication.properties.getProperty("discord","https://icraft.ren:90/titles/Discord"));
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             context.startActivity(intent);
         }
         if (v == joinQQChannel) {
-            Uri uri = Uri.parse(HMCLPEApplication.properties.getProperty("qq-discord","https://icraft.asia:90/titles/QQGroup"));
+            Uri uri = Uri.parse(HMCLPEApplication.properties.getProperty("qq-discord","https://icraft.ren:90/titles/QQGroup"));
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             context.startActivity(intent);
         }

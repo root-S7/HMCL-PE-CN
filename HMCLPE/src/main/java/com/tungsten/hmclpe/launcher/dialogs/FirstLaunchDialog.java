@@ -35,7 +35,7 @@ public class FirstLaunchDialog extends Dialog implements View.OnClickListener {
     public void run(){
         handler = new Handler();
         new Thread(() -> {
-            String url = HMCLPEApplication.properties.getProperty("announcement-url","https://icraft.asia:90/titles/HMCL-PE/2.0.6/announcement.txt");
+            String url = HMCLPEApplication.properties.getProperty("announcement-url","https://icraft.ren:90:90/titles/HMCL-PE/2.0.6/announcement.txt");
             String inputLine;
             try {
                 URL oracle = new URL(url);
