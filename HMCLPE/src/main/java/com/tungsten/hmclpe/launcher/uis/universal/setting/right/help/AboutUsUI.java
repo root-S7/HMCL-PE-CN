@@ -210,7 +210,7 @@ public class AboutUsUI extends BaseUI implements View.OnClickListener {
             uri = Uri.parse(HMCLPEApplication.properties.getProperty("qq-discord","https://icraft.ren:90/titles/QQGroup"));
         }
         if (view == qq) {
-            FeedbackUI.joinQQGroup(context, HMCLPEApplication.properties.getProperty("qq-group-key","tUFbF4hOV-O0Xykwx0VyxISWgKyf8gqe"));
+            FeedbackUI.joinQQGroup(context, HMCLPEApplication.properties.getProperty("qq-group-key","huOeeoWkJd3X-FTqbhgHxNh89hoNJ1cT"));
         }
 
         if (view == libHmcl) {

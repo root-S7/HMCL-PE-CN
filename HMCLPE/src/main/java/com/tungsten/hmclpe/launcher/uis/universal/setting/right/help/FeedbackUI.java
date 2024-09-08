@@ -97,7 +97,7 @@ public class FeedbackUI extends BaseUI implements View.OnClickListener {
             context.startActivity(intent);
         }
         if (v == joinQQ){
-            joinQQGroup(context, HMCLPEApplication.properties.getProperty("qq-group-key","tUFbF4hOV-O0Xykwx0VyxISWgKyf8gqe"));
+            joinQQGroup(context, HMCLPEApplication.properties.getProperty("qq-group-key","huOeeoWkJd3X-FTqbhgHxNh89hoNJ1cT"));
         }
         if (v == jumpToGit){
             Uri uri = Uri.parse("https://github.com/root-S7/HMCL-PE-CN/issues");
