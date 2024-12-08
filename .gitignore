@@ -1,11 +1,27 @@
-*.iml
-.gradle
-local.properties
-/.idea
-.idea/
-.DS_Store
+# Gradle files
+.gradle/
 build/
-captures
-.externalNativeBuild
-.cxx
-release/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# Log/OS Files
+*.log
+
+# Android Studio generated files and folders
+captures/
+.externalNativeBuild/
+.cxx/
+release
+*.apk
+output.json
+
+# IntelliJ
+*.iml
+.idea/
+
+# Google Services (e.g. APIs or Firebase)
+google-services.json
+
+# Android Profiling
+*.hprof
